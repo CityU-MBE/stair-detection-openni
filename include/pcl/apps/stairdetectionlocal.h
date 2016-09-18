@@ -27,6 +27,7 @@
 #include "pcl/models/model_utils.h"
 #include "pcl/models/globalmodel.h"
 #include "pcl/io/globfitwriter.h"
+#include <vector>
 
 namespace pcl
 {
@@ -37,20 +38,81 @@ namespace pcl
       typedef Eigen::aligned_allocator<PointOut> AllocOut;
       typedef std::vector<pcl::Plane3D<PointOut>, AllocOut> Plane3DVector;
       typedef std::vector<pcl::LineSegment3D<PointOut>, Eigen::aligned_allocator<PointOut> > LineSegment3DVector;
-
+      typedef std::vector<Step<PointOut>, Eigen::aligned_allocator<PointOut> > StairSteps;
       typename pcl::PointCloud<PointIn>::ConstPtr inCloud;
       pcl::PlaneSegmentation<PointIn, PointOut> p;
       float cameraAngle, cameraHeight;
       int numIterations;
+      LocalModel<PointOut> model; 
 
-    public:
+  public:
       pcl::GlobalModel<PointOut> globalModel;
       std::string cloudName;
+      
+      //If there is a StairSteps
+      bool stairdetection()
+      {
+        int stair_count = stepsNumberDetection();
+        
+        if (stair_count < 1 || stair_count > 5) return false;
+        else{
+            if (stepsParametersDetection()) return true;
+            else return false;
+        }
+      }
+      // Detect the number of steps
+      int stepsNumberDetection ()
+      {
+        StairSteps steps = model.getSteps ();
+        int count = 0;
+        size_t maxNumberSteps = 3;
+        if (steps.size () >= maxNumberSteps)
+        {
+          printf ("Bigger than max %d : %d\n, Not a stair", (int) maxNumberSteps, steps.size());
+        }
+        else
+        {
+          printf ("Smaller than max: %d\n", (int) steps.size ());
+        }
+        return steps.size();
+      }
+      
+      // Calculate the tread and rise information
+      bool  stepsParametersDetection()
+      { 
+        StairSteps steps = model.getSteps ();
+        float checkThreshold = 0.17;
+        float precision = 0.03;
+        int count = 0;
+        for (size_t i = 0; i < steps.size (); i++)
+        {
+          Step<PointOut>& step = steps[i];
+          if (step.hasTread ())
+          {
+            const Tread<PointOut>& tread = step.getTread ();
+            if ((tread.getLDEpth() < checkThreshold + precision)  && (tread.getLDEpth() > checkThreshold - precision))
+            {
+                //tread.getNormal();
+                return true;
+            }
+            if ((tread.getRDepth() < checkThreshold + precision)  && (tread.getRDepth() > checkThreshold - precision))  return true;
+              //printf ("LocalTread l: %f ld: %f rd: %f---\n", tread.getLength (), tread.getLDEpth (), tread.getRDepth ());
+          }
+          if (step.hasRiser ())
+          {
+            const Riser<PointOut>& riser = step.getRiser();
+            if ((riser.getHeight() < checkThreshold + precision)  && (riser.getHeight() > checkThreshold - precision))  return true;
+            //printf ("LocalRiser l: %f h: %f ---\n", riser.getLength (), riser.getHeight ());
+          } 
+        }  
+        return false;
+      }
+    
 
     protected:
-      void logModel (LocalModel<PointOut> model)
+      void logModel (LocalModel<PointOut> model_)
       {
-        std::vector<Step<PointOut>, Eigen::aligned_allocator<PointOut> > steps = model.getSteps ();
+        StairSteps steps = model_.getSteps ();
         int count = 0;
         size_t maxNumberSteps = 3;
         if (steps.size () >= maxNumberSteps)
@@ -75,18 +137,18 @@ namespace pcl
           if (step.hasRiser ())
           {
             const Riser<PointOut>& riser = step.getRiser ();
-            printf ("LocalRiser l: %f ld: %f rd: %f---\n", riser.getLength (), riser.getLDEpth (), riser.getRDepth ());
+            printf ("LocalRiser l: %f h: %f ---\n", riser.getLength (), riser.getHeight ());
           }
           printf ("\n");
         }
       }
 
-      void calculateCameraHeight (const LocalModel<PointOut>& model)
+      void calculateCameraHeight (const LocalModel<PointOut>& model_)
       {
-        if (model.getSteps ().size () > 0)
+        if (model_.getSteps ().size () > 0)
         {
-          const Step<PointOut>& step = model.getSteps ()[0];
-          if (model.isLookingUpstairs ())
+          const Step<PointOut>& step = model_.getSteps ()[0];
+          if (model_.isLookingUpstairs ())
           {     
         printf("Lookup!\n");
     
@@ -101,7 +163,7 @@ namespace pcl
               cameraHeight = step.getTread ().getHesseDistance ();
             }
           }
-          else if (model.isLookingDownstairs ())
+          else if (model_.isLookingDownstairs ())
           {
         printf("LookDown!\n");
             if (step.hasTread ())
@@ -168,7 +230,7 @@ namespace pcl
 
         LocalModelFactory<PointOut> fac;
         fac.addPlanes (planes);
-        LocalModel<PointOut> model = fac.createLocalModel (true);
+        model = fac.createLocalModel (true);
 
         {
           typename pcl::PointCloud<PointOut>::Ptr bordersCloud = model.getBoundingBoxesCloud();
@@ -178,11 +240,11 @@ namespace pcl
           pcl::io::saveMoPcd(f, *bordersCloud);
           printf("localmodel after creation and add missing planes\n");
           model.logSteps();
-
         }
+        
         pcl::copyPointCloud (*cloud, *outCloud); //Ming: take input as output
-//        printf("localmodel before edge detection:\n");
-//        model.logSteps();
+        //printf("localmodel before edge detection:\n");
+        //model.logSteps();
 
         calculateCameraHeight (model);
         printf("#Model: %d\n", model.getSteps().size() );

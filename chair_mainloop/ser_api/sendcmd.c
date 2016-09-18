@@ -3,7 +3,7 @@
 int main(int argc, char **argv)  
 {  
     //printf("Serial Test\n");  
-    if(FALSE == serial_cmd_init("/dev/ttyUSB5"))  
+    if(FALSE == serial_cmd_init("/dev/ttyUSB0"))  
     {  
         perror("serialport error\n"); 
     }  

@@ -2,3 +2,5 @@
 build/*
 lib/*
 chair_mainloop/build/*
+bin/*
+tailei_test/*
