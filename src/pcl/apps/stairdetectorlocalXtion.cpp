@@ -112,7 +112,7 @@ std::cout << "Before: " << inCloud_->width * inCloud_->height << " After: " << i
                         // Ming: do stair stuff:
                         demo.setInputCloud (inCloudMo);
                         demo.setCloudName ("MingStair");
-                    :
+
                         tmr.reset();
                         pcl::PointCloud<PointIn>::Ptr out = demo.compute ();
                         double t = tmr.elapsed();

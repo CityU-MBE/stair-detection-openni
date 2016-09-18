@@ -1,0 +1,5 @@
+#gitignore
+build/*
+bin/*
+lib/*
+tailei_test/*

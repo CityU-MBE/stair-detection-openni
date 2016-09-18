@@ -45,15 +45,25 @@ namespace pcl
       int numIterations;
       LocalModel<PointOut> model; 
 
-    public:
+  public:
       pcl::GlobalModel<PointOut> globalModel;
       std::string cloudName;
-
-    protected:
-      // Detect the number of steps
-      int stepsNumberDetection (LocalModel<PointOut> model_)
+      
+      //If there is a StairSteps
+      bool stairdetection()
       {
-        StairSteps steps = model_.getSteps ();
+        int stair_count = stepsNumberDetection();
+        
+        if (stair_count < 1 || stair_count > 5) return false;
+        else{
+            if (stepsParametersDetection()) return true;
+            else return false;
+        }
+      }
+      // Detect the number of steps
+      int stepsNumberDetection ()
+      {
+        StairSteps steps = model.getSteps ();
         int count = 0;
         size_t maxNumberSteps = 3;
         if (steps.size () >= maxNumberSteps)
@@ -68,11 +78,11 @@ namespace pcl
       }
       
       // Calculate the tread and rise information
-      std::vector<std::vector<float> >  stepsParametersDetection(LocalModel<PointOut> model_)
+      bool  stepsParametersDetection()
       { 
-        std::vector<float>  treadinformation;
-        std::vector<float>  riserinformation;
-        StairSteps steps = model_.getSteps ();
+        StairSteps steps = model.getSteps ();
+        int checkThreshold = 170;
+        int precision = 10;
         int count = 0;
         for (size_t i = 0; i < steps.size (); i++)
         {
@@ -80,22 +90,26 @@ namespace pcl
           if (step.hasTread ())
           {
             const Tread<PointOut>& tread = step.getTread ();
-            treadinformation.push_back(tread.getLength);
-            treadinformation.push_back(tread.getLDEpth);
-            treadinformation.push_back(tread.getRDepth);
-            //printf ("LocalTread l: %f ld: %f rd: %f---\n", tread.getLength (), tread.getLDEpth (), tread.getRDepth ());
+            if ((tread.getLDEpth() < checkThreshold + precision)  && (tread.getLDEpth() > checkThreshold - precision))
+            {
+                //tread.getNormal();
+                return true;
+            }
+            if ((tread.getRDepth() < checkThreshold + precision)  && (tread.getRDepth() > checkThreshold - precision))  return true;
+              //printf ("LocalTread l: %f ld: %f rd: %f---\n", tread.getLength (), tread.getLDEpth (), tread.getRDepth ());
           }
           if (step.hasRiser ())
           {
-            const Riser<PointOut>& riser = step.getRiser ();
-            riserinformation.push_back(riser.getLength());
-            riserinformation.push_back(riser.getHeight());
+            const Riser<PointOut>& riser = step.getRiser();
+            if ((riser.getHeight() < checkThreshold + precision)  && (riser.getHeight() > checkThreshold - precision))  return true;
             //printf ("LocalRiser l: %f h: %f ---\n", riser.getLength (), riser.getHeight ());
-          }
+          } 
         }  
+        return false;
       }
-     
+    
 
+    protected:
       void logModel (LocalModel<PointOut> model_)
       {
         StairSteps steps = model_.getSteps ();

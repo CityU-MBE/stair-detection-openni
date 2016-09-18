@@ -64,8 +64,8 @@ private:
 };
 //////////////
 
-//typedef pcl::PointMoXYZRGB PointIn;
-//typedef pcl::PointMoXYZRGBNormal PointOut;
+typedef pcl::PointMoXYZRGB PointIn;
+typedef pcl::PointMoXYZRGBNormal PointOut;
 pcl::PointCloud<pcl::PointXYZ> cloud;
 
 int numIterations = 0;
@@ -76,36 +76,41 @@ public:
     SimpleOpenNIViewer () : viewer ("PCL OpenNI Viewer"),frame_id(0),inCloud(new pcl::PointCloud<pcl::PointXYZ>),inCloud_(new pcl::PointCloud<pcl::PointXYZ>){tmr.reset();}
     int frame_id;
 
-    void cloud_cb_ (const pcl::PointCloud<pcl::PointXYZ>::ConstPtr &cloud_) 
-        {
-            //     tmr.reset();
-                        
-            if (!viewer.wasStopped())
-                viewer.showCloud (cloud_);
-            //     double t = tmr.elapsed();
-            //     std::cout << "TIME: display " << t << std::endl;
-            //     tmr.reset();
+    void cloud_cb_ (const pcl::PointCloud<pcl::PointXYZ>::ConstPtr &cloud_) {
+        //     tmr.reset();
+        if (!viewer.wasStopped())
+            viewer.showCloud (cloud_);
 
-            pcl::copyPointCloud(*cloud_, *inCloud_);
-            printf ("processing frame: %d\n", frame_id);
+        pcl::copyPointCloud(*cloud_, *inCloud_);
+        printf ("processing frame: %d\n", frame_id);
 
 #if 1
 // Create the filtering object
-            pcl::VoxelGrid<pcl::PointXYZ> sor;
-            sor.setInputCloud (inCloud_);
-            sor.setLeafSize (0.02, 0.02, 0.02);
-            sor.filter (*inCloud);
+        pcl::VoxelGrid<pcl::PointXYZ> sor;
+        sor.setInputCloud (inCloud_);
+        sor.setLeafSize (0.02, 0.02, 0.02);
+        sor.filter (*inCloud);
 
-            std::cout << "Before: " << inCloud_->width * inCloud_->height << " After: " << inCloud->width * inCloud->height << "\n";
-
+        std::cout << "Before: " << inCloud_->width * inCloud_->height << " After: " << inCloud->width * inCloud->height << "\n";
 #endif
 
-            //      t = tmr.elapsed();
-            //      std::cout << "TIME: start " << t << std::endl;
-            //      tmr.reset();
+        tmr.reset();
+        pcl::PointCloud<PointIn>::Ptr inCloudMo (new pcl::PointCloud<PointIn>);
+        pcl::StairDetectionLocal<pcl::PointMoXYZRGB, pcl::PointMoXYZRGBNormal>  stair_detector; 
+        pcl::copyPointCloud (*inCloud, *inCloudMo);
+        for (size_t i = 0; i < inCloud->size (); i++)
+        {
+            (*inCloudMo)[i].id = (int) i;
+        }
 
-            tmr.reset();
 
+        stair_detector.setInputCloud(inCloudMo);
+        pcl::PointCloud<PointIn>::Ptr out = stair_detector.compute();
+        
+        std::cout<< "There is a stair? "<< stair_detector.stairdetection()<<std::endl;
+
+
+            /*
             pcl::ModelCoefficients::Ptr coefficients (new pcl::ModelCoefficients);
             pcl::PointIndices::Ptr inliers (new pcl::PointIndices);
             // Create the segmentation object
@@ -165,27 +170,27 @@ public:
                                 //    pcl::io::savePCDFileBinary (outPath.c_str (), *out);
                                // pcl::io::saveMoPcd (f, *out);
                         }
-
-                        frame_id ++;
+                */
+                    frame_id ++;
                 }
 
                 void run ()
                 {
-                        pcl::Grabber* interface = new pcl::OpenNIGrabber();
+                    pcl::Grabber* interface = new pcl::OpenNIGrabber();
 
-                        boost::function<void (const pcl::PointCloud<pcl::PointXYZ>::ConstPtr&)> f =
+                    boost::function<void (const pcl::PointCloud<pcl::PointXYZ>::ConstPtr&)> f =
                                 boost::bind (&SimpleOpenNIViewer::cloud_cb_, this, _1);
 
-                        interface->registerCallback (f);
+                    interface->registerCallback (f);
 
-                        interface->start ();
+                    interface->start ();
 
-                        while (!viewer.wasStopped())
-                        {
-                                boost::this_thread::sleep (boost::posix_time::seconds (1));
-                        }
+                    while (!viewer.wasStopped())
+                    {
+                        boost::this_thread::sleep (boost::posix_time::seconds (1));
+                    }
 
-                        interface->stop ();
+                    interface->stop ();
                 }
 
                 pcl::visualization::CloudViewer viewer;
