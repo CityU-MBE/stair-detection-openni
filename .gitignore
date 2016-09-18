@@ -1,0 +1,4 @@
+#gitignore
+build/*
+lib/*
+chair_mainloop/build/*

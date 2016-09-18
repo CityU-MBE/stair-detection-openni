@@ -10,4 +10,11 @@ elseif(COMPILER_SUPPORTS_CXX0X)
 else()
         message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
-add_executable(fsm main.cpp machine.cpp)
+
+find_package(PCL 1.6 REQUIRED)
+include_directories(${PCL_INCLUDE_DIRS})
+link_directories(${PCL_LIBRARY_DIRS})
+add_definitions(${PCL_DEFINITIONS})
+
+add_executable(fsm planar_segmentation.cpp)
+target_link_libraries(fsm ${PCL_COMMON_LIBRARIES} ${PCL_IO_LIBRARIES})
