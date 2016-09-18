@@ -101,11 +101,11 @@ set(FHG_PCL_LIBS fhg_kdtree fhg_utils fhg_io fhg_common fhg_histogram fhg_types 
 #set(FHG_PCL_LIBS fhg_kdtree fhg_utils fhg_io fhg_common fhg_histogram  )
 #set(FHG_PCL_LIBS fhg_pcl)
 
-add_executable(stairdetectorpcds src/pcl/apps/stairdetectorpcds.cpp)
-target_link_libraries(stairdetectorpcds boost_thread boost_filesystem boost_system ${OpenCV_LIBS} ${PCL_LIBRARIES} ${FHG_PCL_BINDINGS} fhg_apps)
+#add_executable(stairdetectorpcds src/pcl/apps/stairdetectorpcds.cpp)
+#target_link_libraries(stairdetectorpcds boost_thread boost_filesystem boost_system ${OpenCV_LIBS} ${PCL_LIBRARIES} ${FHG_PCL_BINDINGS} fhg_apps)
 
-add_executable(stairdetectorlocalpcds src/pcl/apps/stairdetectorlocalpcds.cpp)
-target_link_libraries(stairdetectorlocalpcds boost_thread boost_filesystem boost_system ${OpenCV_LIBS} ${PCL_LIBRARIES} ${FHG_PCL_BINDINGS} fhg_apps)
+#add_executable(stairdetectorlocalpcds src/pcl/apps/stairdetectorlocalpcds.cpp)
+#target_link_libraries(stairdetectorlocalpcds boost_thread boost_filesystem boost_system ${OpenCV_LIBS} ${PCL_LIBRARIES} ${FHG_PCL_BINDINGS} fhg_apps)
 
 #add_executable(stairdetectorlocalXtion src/pcl/apps/stairdetectorlocalXtion.cpp)
 #target_link_libraries(stairdetectorlocalXtion boost_thread boost_filesystem boost_system ${OpenCV_LIBS} ${PCL_LIBRARIES} ${FHG_PCL_BINDINGS} fhg_apps)
