@@ -5,6 +5,7 @@
 #include <iostream>
 #include <unistd.h>
 #include "genericstate.h"
+#include <stdio.h>//lq
 using namespace std;
 class Machine
 {
@@ -61,6 +62,25 @@ private:
         {
             cout << "Transform to : " << trans << " mode" << endl;
             // use Liang Qing's API
+            switch(trans)
+            {
+            case WALK_MODE:
+                system("./test g");
+                break;
+            case STAIRS_MODE:
+                system("./test i");
+                break;
+            case UGV_MODE:
+                system("./test j");
+                break;
+            case TABLE_MODE:
+                system("./test h");
+                break;
+            default:
+                break;
+            }
+
+            sleep(10);
         }
 
         virtual void changeMode(Mode mode) { unhandledEvent(); }
