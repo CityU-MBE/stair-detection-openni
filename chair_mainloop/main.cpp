@@ -32,7 +32,7 @@ class SimpleOpenNIViewer
                         m->setCloudRGBA(*cloud_);
 
                         pcl::copyPointCloud(*cloud_, *inCloud_);
-                        printf ("processing frame: %d\n", frame_id++);
+               //         printf ("processing frame: %d\n", frame_id++);
 
 #if 1
                         // Create the filtering object
@@ -41,14 +41,14 @@ class SimpleOpenNIViewer
                         sor.setLeafSize (0.01, 0.01, 0.01);
                         sor.filter (*inCloud);
 
-                        std::cout << "Before: " << inCloud_->width * inCloud_->height << " After: " << inCloud->width * inCloud->height << "\n";
+              //          std::cout << "Before: " << inCloud_->width * inCloud_->height << " After: " << inCloud->width * inCloud->height << "\n";
 
 #endif
                 }
 
                 void run ()
                 {
-                        pcl::Grabber* interface = new pcl::OpenNIGrabber();
+                        pcl::Grabber* interface = new pcl::OpenNIGrabber("#1");
 
                         boost::function<void (const pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr&)> f =
                                 boost::bind (&SimpleOpenNIViewer::cloud_cb_, this, _1);
