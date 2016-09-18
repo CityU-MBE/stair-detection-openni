@@ -77,7 +77,6 @@ public:
     int frame_id;
 
     void cloud_cb_ (const pcl::PointCloud<pcl::PointXYZ>::ConstPtr &cloud_) {
-        //     tmr.reset();
         if (!viewer.wasStopped())
             viewer.showCloud (cloud_);
 
@@ -91,7 +90,7 @@ public:
         sor.setLeafSize (0.02, 0.02, 0.02);
         sor.filter (*inCloud);
 
-        std::cout << "Before: " << inCloud_->width * inCloud_->height << " After: " << inCloud->width * inCloud->height << "\n";
+        //std::cout << "Before: " << inCloud_->width * inCloud_->height << " After: " << inCloud->width * inCloud->height << "\n";
 #endif
 
         tmr.reset();
@@ -107,7 +106,8 @@ public:
         stair_detector.setInputCloud(inCloudMo);
         pcl::PointCloud<PointIn>::Ptr out = stair_detector.compute();
         
-        std::cout<< "There is a stair? "<< stair_detector.stairdetection()<<std::endl;
+        std::cout<< "####    There is a stair?    ####"<<std::endl;
+        std::cout<< "####    "<<stair_detector.stairdetection()<< "    ####" <<std::endl;
 
 
             /*
@@ -171,31 +171,31 @@ public:
                                // pcl::io::saveMoPcd (f, *out);
                         }
                 */
-                    frame_id ++;
-                }
+        frame_id ++;
+    }
 
-                void run ()
-                {
-                    pcl::Grabber* interface = new pcl::OpenNIGrabber();
+        void run ()
+        {
+        pcl::Grabber* interface = new pcl::OpenNIGrabber();
 
-                    boost::function<void (const pcl::PointCloud<pcl::PointXYZ>::ConstPtr&)> f =
-                                boost::bind (&SimpleOpenNIViewer::cloud_cb_, this, _1);
+        boost::function<void (const pcl::PointCloud<pcl::PointXYZ>::ConstPtr&)> f =
+        boost::bind (&SimpleOpenNIViewer::cloud_cb_, this, _1);
 
-                    interface->registerCallback (f);
+        interface->registerCallback (f);
 
-                    interface->start ();
+        interface->start ();
 
-                    while (!viewer.wasStopped())
-                    {
-                        boost::this_thread::sleep (boost::posix_time::seconds (1));
-                    }
+        while (!viewer.wasStopped())
+        {
+            boost::this_thread::sleep (boost::posix_time::seconds (1));
+        }
 
-                    interface->stop ();
-                }
+        interface->stop ();
+        }
 
-                pcl::visualization::CloudViewer viewer;
-                pcl::PointCloud<pcl::PointXYZ>::Ptr inCloud, inCloud_;
-                Timer tmr;
+        pcl::visualization::CloudViewer viewer;
+        pcl::PointCloud<pcl::PointXYZ>::Ptr inCloud, inCloud_;
+        Timer tmr;
 };
 
 

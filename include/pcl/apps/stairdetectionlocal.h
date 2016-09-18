@@ -54,7 +54,7 @@ namespace pcl
       {
         int stair_count = stepsNumberDetection();
         
-        if (stair_count < 1 || stair_count > 5) return false;
+        if (stair_count < 1 || stair_count > 3) return false;
         else{
             if (stepsParametersDetection()) return true;
             else return false;
@@ -68,7 +68,7 @@ namespace pcl
         size_t maxNumberSteps = 3;
         if (steps.size () >= maxNumberSteps)
         {
-          printf ("Bigger than max %d : %d\n, Not a stair", (int) maxNumberSteps, steps.size());
+          printf ("Bigger than max %d : %d\n, Not a stair \n", (int) maxNumberSteps, steps.size());
         }
         else
         {
@@ -246,10 +246,10 @@ namespace pcl
         //printf("localmodel before edge detection:\n");
         //model.logSteps();
 
-        calculateCameraHeight (model);
-        printf("#Model: %d\n", model.getSteps().size() );
-        printf("Camera Height: %.4f\n", cameraHeight);
-        printf("Camera Angle: %.4f\n", cameraAngle);
+        //calculateCameraHeight (model);
+        //printf("#Model: %d\n", model.getSteps().size() );
+        //printf("Camera Height: %.4f\n", cameraHeight);
+        //printf("Camera Angle: %.4f\n", cameraAngle);
         
         //printf("logModel: \n");
         //logModel(model);
