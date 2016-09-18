@@ -6,11 +6,18 @@
 #include <unistd.h>
 #include "genericstate.h"
 #include <stdio.h>//lq
+
+// pcl:
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
+#include <pcl/common/io.h>
 using namespace std;
 class Machine
 {
 public:
     Machine() :
+        cloudXYZ(new pcl::PointCloud<pcl::PointXYZ>),
+        cloudXYZRGBA(new pcl::PointCloud<pcl::PointXYZRGBA>),
         table(*this, modeState),
         walk(*this, modeState),
         ugv(*this, modeState),
@@ -25,7 +32,8 @@ public:
        PLANE,
        STAIRS,
        GROUND_ONLY,
-       BUMPS
+       BUMPS,
+       NONE_OBJ
    };
 
    enum Transform { // serial port
@@ -44,11 +52,17 @@ public:
    };
 public:
    void changeMode(Mode mode) { modeState->changeMode(mode); }
+    void setCloudRGBA(const pcl::PointCloud<pcl::PointXYZRGBA> &);
 
 
 private:
     static void print(const std::string &str) { std::cout << str << std::endl; }
     static void unhandledEvent() { print("unhandled event"); }
+
+    pcl::PointCloud<pcl::PointXYZ>::Ptr cloudXYZ;
+    pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloudXYZRGBA;
+
+    void convertToXYZ(const pcl::PointCloud<pcl::PointXYZRGBA> &, pcl::PointCloud<pcl::PointXYZ> &);
 
 
 private:
@@ -65,21 +79,20 @@ private:
             switch(trans)
             {
             case WALK_MODE:
-                system("./test g");
+                system("./sendcmd g");
                 break;
             case STAIRS_MODE:
-                system("./test i");
+                system("./sendcmd i");
                 break;
             case UGV_MODE:
-                system("./test j");
+                system("./sendcmd j");
                 break;
             case TABLE_MODE:
-                system("./test h");
+                system("./sendcmd h");
                 break;
             default:
                 break;
             }
-
             sleep(10);
         }
 
@@ -89,20 +102,22 @@ private:
     struct StartMode : public ModeState {
         explicit StartMode(Machine &m, ModeState *&state): ModeState(m, state){}
         void entry() {
-                print("entering StartMode");
+                print("[START MODE] entering StartMode");
                 Object obj;
                 while(obj != TABLE_OBJ){
                         obj  = detect_object();
-                        usleep(5);
+                        usleep(300000);
                 }
                 changeMode(TABLE);
         }
         Object detect_object()
         { // TODO: detect for PLANES
-            return TABLE_OBJ;
+            //return TABLE_OBJ;
+            cout << "[START MODE] try detect => @" << endl;
+            return NONE_OBJ;
         }
         void changeMode(Mode mode) {
-                print("change to Mode: TABLE");
+                print("[START MODE] change to Mode: TABLE");
                 if (mode == TABLE)
                 {
                         print("OK.\n");
@@ -115,13 +130,13 @@ private:
         }
 
         //void bringDown() { change<Low>(); }
-        void exit() { print("leaving StartMode"); }
+        void exit() { print("[START MODE] leaving StartMode"); }
     } start_mode;
 
     struct TableMode : public ModeState {
         explicit TableMode(Machine &m, ModeState *&state): ModeState(m, state){}
         void entry() {
-                print("entering TableMode");
+                print("[TABLE MODE] entering TableMode");
                 Object obj;
                 while(obj != GROUND_ONLY){
                         obj  = detect_object();
@@ -134,7 +149,7 @@ private:
             return GROUND_ONLY;
         }
         void changeMode(Mode mode) {
-                cout << "change to Mode: " << mode << endl;
+                cout << "[TABLE MODE] change to Mode: " << mode << endl;
                 if (mode == WALK)
                 {
                         print("OK.\n");
@@ -144,14 +159,14 @@ private:
                         print("Not IMPLEMENTED.");
         }
         //void bringDown() { change<Low>(); }
-        void exit() { print("leaving TableMode"); }
+        void exit() { print("[TABLE MODE] leaving TableMode"); }
     } table;
 
 
     struct WalkMode : public ModeState {
         explicit WalkMode(Machine &m, ModeState *&state): initflag(0), ModeState(m, state){}
         void entry() {
-                print("entering Walk Mode");
+                print("[WALK MODE] entering Walk Mode");
                 Object obj;
                 while(obj != BUMPS && obj != STAIRS && obj != GROUND_ONLY){
                         obj  = detect_object();
@@ -182,27 +197,27 @@ private:
                 else {return GROUND_ONLY;}
         }
         void changeMode(Mode mode) {
-                cout << "change to Mode: " << mode << endl;
+                cout << "[WALK MODE] change to Mode: " << mode << endl;
                 if (mode == UGV)
                 {
-                        print("OK. Bumps\n");
+                        print("[WALK MODE] OK. Bumps\n");
                         change(s.ugv);
                 }
                 else if (mode == STAIR) // may not work due to detection
                 {
-                        print("OK. Go downstairs.\n");
+                        print("[WALK MODE] OK. Go downstairs.\n");
                         change(s.stair);
                 } else
                         print("Not IMPLEMENTED.");
         }
-        void exit() { print("leaving Walk"); }
+        void exit() { print("[WALK MODE] leaving Walk"); }
     } walk;
 
 
     struct UGVMode : public ModeState {
         explicit UGVMode(Machine &m, ModeState *&state): ModeState(m, state){}
         void entry() {
-                print("entering UGV Mode");
+                print("[UGV MODE] entering UGV Mode");
                 Object obj;
                 while(obj != STAIRS){
                         obj  = detect_object();
@@ -215,22 +230,22 @@ private:
             return STAIRS;
         }
         void changeMode(Mode mode) {
-                cout << "change to Mode: " << mode << endl;
+                cout << "[UGV MODE] change to Mode: " << mode << endl;
                 if (mode == STAIR)
                 {
-                        print("OK.\n");
+                        print("[UGV MODE] OK.\n");
                         change(s.stair);
                 }
                 else
                         print("Not IMPLEMENTED.");
         }
-        void exit() { print("leaving UGV"); }
+        void exit() { print("[UGV MODE] leaving UGV"); }
     } ugv;
 
     struct StairMode : public ModeState {
         explicit StairMode(Machine &m, ModeState *&state): ModeState(m, state){}
         void entry() {
-                print("entering STAIR Mode");
+                print("[STAIR MODE] entering STAIR Mode");
                 wait_for_alignment();
                 Object obj;
                 while(obj != GROUND_ONLY){
@@ -242,23 +257,23 @@ private:
         void wait_for_alignment()
         {
             usleep(500000); // change to alignment checking function
-            cout << "ALIGNED" << endl;
+            cout << "[STAIR MODE] ALIGNED" << endl;
         }
         Object detect_object()
         { // TODO: detect for PLANES
             return GROUND_ONLY;
         }
         void changeMode(Mode mode) {
-                cout << "change to Mode: " << mode << endl;
+                cout << "[STAIR MODE] change to Mode: " << mode << endl;
                 if (mode == WALK)
                 {
-                        print("OK. In-place Turn\n");
+                        print("[STAIR MODE] OK. In-place Turn\n");
                         change(s.walk);
                 }
                 else
                         print("Not IMPLEMENTED.");
         }
-        void exit() { print("leaving Stair mode."); }
+        void exit() { print("[STAIR MODE] leaving Stair mode."); }
     } stair;
 };
 
