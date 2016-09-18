@@ -5,6 +5,10 @@
 #include <iostream>
 #include <unistd.h>
 #include "genericstate.h"
+
+#include "pcl/apps/stairdetectionlocal.h"
+
+
 using namespace std;
 class Machine
 {
@@ -243,6 +247,7 @@ private:
         }
         void exit() { print("leaving Stair mode."); }
     } stair;
+
 };
 
 #endif // MACHINE_H

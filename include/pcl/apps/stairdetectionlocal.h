@@ -75,7 +75,7 @@ namespace pcl
           if (step.hasRiser ())
           {
             const Riser<PointOut>& riser = step.getRiser ();
-            printf ("LocalRiser l: %f ld: %f rd: %f---\n", riser.getLength (), riser.getLDEpth (), riser.getRDepth ());
+            printf ("LocalRiser l: %f h: %f ---\n", riser.getLength (), riser.getHeight ());
           }
           printf ("\n");
         }
@@ -190,7 +190,9 @@ namespace pcl
         printf("Camera Angle: %.4f\n", cameraAngle);
         
         //printf("logModel: \n");
-        //logModel(model);
+        
+        
+        logModel(model);
 
 
         printf ("----------------------------------------------------\n");
