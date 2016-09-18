@@ -5,6 +5,10 @@
 #include <iostream>
 #include <unistd.h>
 #include "genericstate.h"
+
+//#include "pcl/apps/stairdetectionlocal.h"
+
+
 #include <stdio.h>//lq
 
 // pcl:
@@ -275,6 +279,7 @@ private:
         }
         void exit() { print("[STAIR MODE] leaving Stair mode."); }
     } stair;
+
 };
 
 #endif // MACHINE_H
