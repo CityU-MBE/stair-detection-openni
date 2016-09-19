@@ -21,7 +21,7 @@ class SimpleOpenNIViewer
                 int frame_id;
                 boost::thread m_thread;
 
-                void cloud_cb_ (const pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr &cloud_) 
+                void cloud_cb_ (const pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr &cloud_)
                 {
                         //     tmr.reset();
 
@@ -80,7 +80,7 @@ int main()
 {
         Machine m;
         boost::thread* thr = new boost::thread(boost::bind(&Machine::start, &m));
-        SimpleOpenNIViewer v(&m); 
+        SimpleOpenNIViewer v(&m);
         v.run ();
 
         return 0;

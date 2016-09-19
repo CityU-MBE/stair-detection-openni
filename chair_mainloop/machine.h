@@ -15,6 +15,17 @@
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <pcl/common/io.h>
+
+// for plane extraction -- YHY:
+#include <pcl/ModelCoefficients.h>
+#include <pcl/segmentation/sac_segmentation.h>
+#include <pcl/filters/extract_indices.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_types.h>
+#include <pcl/sample_consensus/method_types.h>
+#include <pcl/sample_consensus/model_types.h>
+#include <pcl/common/transforms.h>
+
 using namespace std;
 class Machine
 {
@@ -34,7 +45,7 @@ public:
 
 public:
    enum Object { //detectable objects
-      TABLE_OBJ,
+       TABLE_OBJ,
        PLANE,
        PLANE_END,
        STAIRS,
@@ -132,7 +143,7 @@ private:
         {
             for (size_t i = 0; i<list.size(); i++)
             {
-                Object obj = detect_object_core( list[i], s.cloudXYZ_front ); 
+                Object obj = detect_object_core( list[i], s.cloudXYZ_front );
                 if (obj != NONE_OBJ)
                     return obj;
                 else
@@ -143,7 +154,7 @@ private:
         {
             for (size_t i = 0; i<list.size(); i++)
             {
-                Object obj = detect_object_core( list[i], s.cloudXYZ_back ); 
+                Object obj = detect_object_core( list[i], s.cloudXYZ_back );
                 if (obj != NONE_OBJ)
                     return obj;
                 else
@@ -183,11 +194,93 @@ private:
         // individual detectors:
         Object YHY_code_TABLE(const pcl::PointCloud<pcl::PointXYZ>::Ptr & ptc)
         {
-            //TODO: change to real code
-            cout << "try detect => TABLE_OBJ" << endl;
+
+            pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_p (new pcl::PointCloud<pcl::PointXYZ>), cloud_f (new pcl::PointCloud<pcl::PointXYZ>),
+                                                inCloud (new pcl::PointCloud<pcl::PointXYZ>);
+
+            pcl::copyPointCloud(*ptc, *inCloud);
+
+            pcl::ModelCoefficients::Ptr coefficients (new pcl::ModelCoefficients);
+            pcl::PointIndices::Ptr inliers (new pcl::PointIndices);
+            // Create the segmentation object
+            pcl::SACSegmentation<pcl::PointXYZ> seg;
+            // Optional
+            seg.setOptimizeCoefficients (true);
+            // Mandatory
+            seg.setModelType (pcl::SACMODEL_PLANE);
+            seg.setMethodType (pcl::SAC_RANSAC);
+            seg.setDistanceThreshold (0.01);
+
+            /** ------ Create the filtering object - start ------
+            * ref: http://pointclouds.org/documentation/tutorials/extract_indices.php
+            */
+            int i = 0, nr_points = (int) inCloud->points.size ();
+            pcl::ExtractIndices<pcl::PointXYZ> extract;
+
+            // While 30% of the original cloud is still there
+            while (inCloud->points.size () > 0.3 * nr_points) {
+                seg.setInputCloud (inCloud);
+                seg.segment (*inliers, *coefficients);
+
+                if (inliers->indices.size () == 0) {
+                  std::cerr << "Could not estimate a planar model for the given dataset." << std::endl;
+                  break;
+                }
+
+                Eigen::Vector3f M, N, axis, tmp; // M: current; N: reference; axis: rotation axis
+                M << coefficients->values[0], coefficients->values[1], coefficients->values[2];
+                N << 0.0, 1.0, 0.0;
+
+                // sepration angle cos
+                double costheta = M.dot(N) / (M.norm() * N.norm());
+
+                // cout << "angle cos:" << costheta << endl;
+
+                // Extract the inliers
+                extract.setInputCloud (inCloud);
+                extract.setIndices (inliers);
+                extract.setNegative (false);
+                extract.filter (*cloud_p);
+                // std::cerr << "PointCloud representing the planar component: " << cloud_p->width * cloud_p->height << " data points." << std::endl;
+
+                // Create the filtering object
+                extract.setNegative (true);
+                extract.filter (*cloud_f);
+                inCloud.swap (cloud_f); // inCloud
+
+                i++;
+
+                if ( abs(costheta) > 0.8 ) {
+                    std::cout << "\033[1;32mbold DETECT PLANE !! \033[0m\n" << std::endl;
+                    if (!(coefficients->values[3] < -0.5 && coefficients->values[3] > -0.8)) {
+                        continue;
+                    }
+
+                    /** ------ Create the filtering object - end------ */
+
+                    int pPointsNum = (int) cloud_p->points.size (); // number of filtered points -- the plane
+
+
+                    std::cerr << "    TABLE TABLE TABLE TABLE!!!!" << " i: "<< i << " costheta: " << costheta << std::endl;
+                    std::cout << "\033[1;32mbold TABLE TABLE TABLE TABLE!!!! height of table is \033[0m" <<  - coefficients->values[3] << "m." << std::endl;
+
+                    cout << "try detect => TABLE_OBJ" << endl;
+                    s.my_pause();
+                    cout << "detected" << endl;
+                    return TABLE_OBJ;
+
+                    break;
+                }
+            }
+
+            // printf("### Computation Done. ###\n");
+            // printf("============================================\n");
+            /* ------- table_detection end -------*/
+
+            cout << "try detect => NONE_OBJ" << endl;
             s.my_pause();
-            cout << "detected" << endl;
-            return TABLE_OBJ;
+            cout << "not detected" << endl;
+            return NONE_OBJ;
         }
 
         Object YHY_code_PLANE_END(const pcl::PointCloud<pcl::PointXYZ>::Ptr & ptc)
