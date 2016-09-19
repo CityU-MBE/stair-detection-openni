@@ -144,11 +144,6 @@ private:
             std::cerr << "List size: " << list.size() << std::endl;
             Object obj = NONE_OBJ;
 
-            /** !!!IMPORTANT, FOLLOWING WHILE LOOP NEEDS TO BE CHECKED:
-            *@ Change the structure for loop, otherwise it will not work
-            *@ YHY
-            */
-            while (obj == NONE_OBJ){
                 for (size_t i = 0; i < list.size(); i++)
                 {
                     obj = detect_object_core( list[i], s.cloudXYZ_front );
@@ -158,7 +153,7 @@ private:
                     else
                         continue;
                 }
-            }
+            return NONE_OBJ;
         }
         Object detect_object_new_back(const std::vector<Object> & list)
         {
@@ -170,6 +165,7 @@ private:
                 else
                     continue;
             }
+            return NONE_OBJ;
         }
         Object detect_object_core(const Object & obj, const pcl::PointCloud<pcl::PointXYZ>::Ptr & ptc)
         {
