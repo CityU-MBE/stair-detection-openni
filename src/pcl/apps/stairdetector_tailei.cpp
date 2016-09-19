@@ -75,7 +75,7 @@ class SimpleOpenNIViewer
 public:
     SimpleOpenNIViewer () : viewer ("PCL OpenNI Viewer"),frame_id(0),inCloud(new pcl::PointCloud<pcl::PointXYZ>),inCloud_(new pcl::PointCloud<pcl::PointXYZ>){tmr.reset();}
     int frame_id;
-    int stair_angle_threshold = 0.8;
+    double stair_angle_threshold = 0.08;
 
     void cloud_cb_ (const pcl::PointCloud<pcl::PointXYZ>::ConstPtr &cloud_) {
         if (!viewer.wasStopped())
@@ -118,17 +118,17 @@ public:
             //                                    << coefficients->values[2] << " " 
             //                                    << coefficients->values[3] << std::endl;
 
-            Eigen::Vector3f M, N, axis, tmp; // M: current; N: reference; axis: rotation axis
-            M << 0.0 , 0.0 ,1.0;
-            N  = stair_detector.getRiserNormal();
+            Eigen::Vector3f M; // M: current;
+            M << 0.0,0.0,1.0;
+            Eigen::Vector3f N  = stair_detector.getRiserNormal();
             
             // sepration angle cos
             double costheta = M.dot(N) / (M.norm() * N.norm());
 
-            cout << "angle cos:" << costheta << endl;
-            if ( abs(costheta) > stair_angle_threshold ) std::cout << "\033[1;32mbold Riser is Ready!!  \033[0m\n" << std::endl;
+            cout << "angle cos :" << costheta << endl;
+            if ( abs(costheta) < stair_angle_threshold ) std::cout << "\033[1;32m Riser is Ready!!  \033[0m\n" << std::endl;
             else {
-                std::cout << "\033[1;31mbold Riser is not Ready!!  \033[0m\n" << std::endl;
+                std::cout << "\033[1;31m Riser is not Ready!!  \033[0m\n" << std::endl;
             }
         }
         double t = tmr.elapsed();
