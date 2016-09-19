@@ -1,0 +1,137 @@
+[
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/fhg_apps.dir/src/pcl/fhg_apps.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/src/pcl/fhg_apps.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/src/pcl/fhg_apps.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/fhg_binding_common.dir/src/fhg_binding_common.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/src/fhg_binding_common.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/src/fhg_binding_common.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/fhg_binding_features.dir/src/fhg_binding_features.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/src/fhg_binding_features.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/src/fhg_binding_features.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/fhg_binding_filters.dir/src/fhg_binding_filters.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/src/fhg_binding_filters.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/src/fhg_binding_filters.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/fhg_binding_kdtree.dir/src/fhg_binding_kdtree.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/src/fhg_binding_kdtree.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/src/fhg_binding_kdtree.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/fhg_binding_registration.dir/src/fhg_binding_registration.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/src/fhg_binding_registration.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/src/fhg_binding_registration.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/fhg_binding_sac.dir/src/fhg_binding_sac.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/src/fhg_binding_sac.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/src/fhg_binding_sac.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/fhg_binding_search.dir/src/fhg_binding_search.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/src/fhg_binding_search.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/src/fhg_binding_search.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/fhg_binding_segmentation.dir/src/fhg_binding_segmentation.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/src/fhg_binding_segmentation.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/src/fhg_binding_segmentation.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/fhg_binding_surface.dir/src/fhg_binding_surface.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/src/fhg_binding_surface.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/src/fhg_binding_surface.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/fhg_binding_visualization.dir/src/fhg_binding_visualization.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/src/fhg_binding_visualization.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/src/fhg_binding_visualization.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/fhg_common.dir/src/pcl/fhg_common.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/src/pcl/fhg_common.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/src/pcl/fhg_common.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/fhg_histogram.dir/src/pcl/fhg_histogram.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/src/pcl/fhg_histogram.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/src/pcl/fhg_histogram.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/fhg_io.dir/src/pcl/fhg_io.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/src/pcl/fhg_io.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/src/pcl/fhg_io.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/fhg_kdtree.dir/src/pcl/fhg_kdtree.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/src/pcl/fhg_kdtree.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/src/pcl/fhg_kdtree.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/fhg_models.dir/src/pcl/fhg_models.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/src/pcl/fhg_models.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/src/pcl/fhg_models.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/fhg_opencv.dir/src/pcl/fhg_opencv.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/src/pcl/fhg_opencv.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/src/pcl/fhg_opencv.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/fhg_registration.dir/src/pcl/fhg_registration.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/src/pcl/fhg_registration.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/src/pcl/fhg_registration.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/fhg_segmentation.dir/src/pcl/fhg_segmentation.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/src/pcl/fhg_segmentation.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/src/pcl/fhg_segmentation.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/fhg_surface.dir/src/pcl/fhg_surface.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/src/pcl/fhg_surface.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/src/pcl/fhg_surface.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/fhg_types.dir/src/pcl/fhg_types.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/src/pcl/fhg_types.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/src/pcl/fhg_types.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/fhg_utils.dir/src/pcl/fhg_utils.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/src/pcl/fhg_utils.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/src/pcl/fhg_utils.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/icp_vis.dir/tests/icp_vis.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/tests/icp_vis.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/tests/icp_vis.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/normalsvis.dir/src/pcl/apps/normalsvis.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/src/pcl/apps/normalsvis.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/src/pcl/apps/normalsvis.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/pcd_to_rgb.dir/src/pcl/apps/pcd_to_rgb.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/src/pcl/apps/pcd_to_rgb.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/src/pcl/apps/pcd_to_rgb.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/playground.dir/tests/playground.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/tests/playground.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/tests/playground.cpp"
+},
+{
+  "directory": "/home/tyler/Documents/Lab/stair-detection-openni/build",
+  "command": "/usr/bin/c++   -DDISABLE_PCAP -DDISABLE_PNG -DEIGEN_USE_NEW_STDVECTOR -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET -DFLANN_STATIC -Dqh_QHpointer -W -Wall -Wno-unused-parameter -frounding-math   -Wno-deprecated -O2 -g -DNDEBUG -I/usr/include/opencv -I/usr/include/vtk-5.8 -I/usr/include/pcl-1.7 -I/usr/local/include/eigen3 -I/usr/include/ni -I/usr/include/openni2 -I/home/tyler/Documents/Lab/stair-detection-openni/include    -o CMakeFiles/steps_test.dir/src/pcl/apps/stairdetector_tailei.cpp.o -c /home/tyler/Documents/Lab/stair-detection-openni/src/pcl/apps/stairdetector_tailei.cpp",
+  "file": "/home/tyler/Documents/Lab/stair-detection-openni/src/pcl/apps/stairdetector_tailei.cpp"
+}
+]

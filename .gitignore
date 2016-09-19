@@ -1,6 +1,10 @@
 #gitignore
 build/*
 lib/*
+<<<<<<< HEAD
 chair_mainloop/build/*
 bin/*
+=======
+compile_commands.json
+>>>>>>> dc179bb8fadd8068f75d71bf79cfc9b435bada78
 tailei_test/*

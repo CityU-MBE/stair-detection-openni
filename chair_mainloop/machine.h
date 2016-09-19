@@ -141,6 +141,7 @@ private:
 
         Object detect_object_new_front(const std::vector<Object> & list)
         {
+            std::cerr << "list number:" << list.size() << std::endl;
             for (size_t i = 0; i<list.size(); i++)
             {
                 Object obj = detect_object_core( list[i], s.cloudXYZ_front );
@@ -216,6 +217,8 @@ private:
             */
             int i = 0, nr_points = (int) inCloud->points.size ();
             pcl::ExtractIndices<pcl::PointXYZ> extract;
+
+            std::cerr << "YHY_code_TABLE!!!!" << std::endl;
 
             // While 30% of the original cloud is still there
             while (inCloud->points.size () > 0.3 * nr_points) {
@@ -332,6 +335,7 @@ private:
                         std::vector<Object> which_objects;
                         which_objects.push_back(TABLE_OBJ);
                         obj  = detect_object_new(which_objects, FCAMERA, "[START MODE]");
+                        std::cerr << "FINISH ONE TIME" << std::endl;
                         usleep(300000);
                 }
                 changeMode(TABLE);

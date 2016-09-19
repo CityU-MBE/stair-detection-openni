@@ -43,7 +43,8 @@ namespace pcl
       pcl::PlaneSegmentation<PointIn, PointOut> p;
       float cameraAngle, cameraHeight;
       int numIterations;
-      LocalModel<PointOut> model; 
+      LocalModel<PointOut> model;
+      Eigen::Vector3f RiserNormal;
 
   public:
       pcl::GlobalModel<PointOut> globalModel;
@@ -52,28 +53,30 @@ namespace pcl
       //If there is a StairSteps
       bool stairdetection()
       {
+        int maxNumberSteps = 6;
+        int minNumberSteps = 2;
         int stair_count = stepsNumberDetection();
-        
-        if (stair_count < 1 || stair_count > 3) return false;
-        else{
-            if (stepsParametersDetection()) return true;
-            else return false;
+         
+        if (stair_count < minNumberSteps || stair_count > maxNumberSteps) {
+            std::cout<<"Number of steps is unsatisfied: " << stair_count <<std::endl;
+            return false;
+        }else if (stepsParametersDetection()){
+            std::cout<<"Normal of riser is: " << RiserNormal <<std::endl;
+            return true;
+        }else {
+            std::cout<<"Heigh of Riser is unsatisfied: " << stair_count <<std::endl;
+            return false;
         }
       }
+      
+      Eigen::Vector3f getRiserNormal(){
+          return RiserNormal;
+      }
+
       // Detect the number of steps
-      int stepsNumberDetection ()
+      inline int stepsNumberDetection ()
       {
         StairSteps steps = model.getSteps ();
-        int count = 0;
-        size_t maxNumberSteps = 3;
-        if (steps.size () >= maxNumberSteps)
-        {
-          printf ("Bigger than max %d : %d\n, Not a stair \n", (int) maxNumberSteps, steps.size());
-        }
-        else
-        {
-          printf ("Smaller than max: %d\n", (int) steps.size ());
-        }
         return steps.size();
       }
       
@@ -81,8 +84,8 @@ namespace pcl
       bool  stepsParametersDetection()
       { 
         StairSteps steps = model.getSteps ();
-        float checkThreshold = 0.17;
-        float precision = 0.03;
+        float checkThreshold = 0.12;
+        float precision = 0.02;
         int count = 0;
         for (size_t i = 0; i < steps.size (); i++)
         {
@@ -92,17 +95,23 @@ namespace pcl
             const Tread<PointOut>& tread = step.getTread ();
             if ((tread.getLDEpth() < checkThreshold + precision)  && (tread.getLDEpth() > checkThreshold - precision))
             {
-                //tread.getNormal();
+                RiserNormal = tread.getNormal();
                 return true;
             }
-            if ((tread.getRDepth() < checkThreshold + precision)  && (tread.getRDepth() > checkThreshold - precision))  return true;
-              //printf ("LocalTread l: %f ld: %f rd: %f---\n", tread.getLength (), tread.getLDEpth (), tread.getRDepth ());
+            if ((tread.getRDepth() < checkThreshold + precision)  && (tread.getRDepth() > checkThreshold - precision))
+            {
+                RiserNormal = tread.getNormal();
+                return true;
+            }
           }
           if (step.hasRiser ())
           {
             const Riser<PointOut>& riser = step.getRiser();
-            if ((riser.getHeight() < checkThreshold + precision)  && (riser.getHeight() > checkThreshold - precision))  return true;
-            //printf ("LocalRiser l: %f h: %f ---\n", riser.getLength (), riser.getHeight ());
+            if ((riser.getHeight() < checkThreshold + precision)  && (riser.getHeight() > checkThreshold - precision))  
+              {
+                RiserNormal = riser.getNormal();
+                return true;
+              }
           } 
         }  
         return false;
