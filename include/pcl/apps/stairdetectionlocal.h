@@ -84,8 +84,8 @@ namespace pcl
       bool  stepsParametersDetection()
       { 
         StairSteps steps = model.getSteps ();
-        float checkThreshold = 0.17;
-        float precision = 0.03;
+        float checkThreshold = 0.12;
+        float precision = 0.02;
         int count = 0;
         for (size_t i = 0; i < steps.size (); i++)
         {
