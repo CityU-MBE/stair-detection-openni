@@ -92,7 +92,7 @@ public:
 
         //std::cout << "Before: " << inCloud_->width * inCloud_->height << " After: " << inCloud->width * inCloud->height << "\n";
 #endif
-
+        
         tmr.reset();
         pcl::PointCloud<PointIn>::Ptr inCloudMo (new pcl::PointCloud<PointIn>);
         pcl::StairDetectionLocal<pcl::PointMoXYZRGB, pcl::PointMoXYZRGBNormal>  stair_detector; 
@@ -102,11 +102,10 @@ public:
             (*inCloudMo)[i].id = (int) i;
         }
 
-
         stair_detector.setInputCloud(inCloudMo);
         pcl::PointCloud<PointIn>::Ptr out = stair_detector.compute();
         
-        std::cout<< "####    There is a stair?    ####"<<std::endl;
+        std::cout<< "####    There is a stair?    ####" <<std::endl;
         std::cout<< "####    "<<stair_detector.stairdetection()<< "    ####" <<std::endl;
 
 
