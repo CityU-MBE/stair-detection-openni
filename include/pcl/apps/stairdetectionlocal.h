@@ -44,7 +44,7 @@ namespace pcl
       float cameraAngle, cameraHeight;
       int numIterations;
       LocalModel<PointOut> model;
-      Eigen::Vector3f RiserNormal;
+      Eigen::Vector3f  RiserNormal;
 
   public:
       pcl::GlobalModel<PointOut> globalModel;
@@ -61,7 +61,7 @@ namespace pcl
             std::cout<<"Number of steps is unsatisfied: " << stair_count <<std::endl;
             return false;
         }else if (stepsParametersDetection()){
-            std::cout<<"Normal of riser is: " << RiserNormal <<std::endl;
+            std::cout<<"Number of steps is correct: " << stair_count <<std::endl;
             return true;
         }else {
             std::cout<<"Heigh of Riser is unsatisfied: " << stair_count <<std::endl;
@@ -95,11 +95,13 @@ namespace pcl
             const Tread<PointOut>& tread = step.getTread ();
             if ((tread.getLDEpth() < checkThreshold + precision)  && (tread.getLDEpth() > checkThreshold - precision))
             {
+                std::cout<<"##### Riser height is : "<<tread.getLDEpth() << std::endl;
                 RiserNormal = tread.getNormal();
                 return true;
             }
             if ((tread.getRDepth() < checkThreshold + precision)  && (tread.getRDepth() > checkThreshold - precision))
             {
+                std::cout<<"##### Riser height is : "<<tread.getRDepth() << std::endl;
                 RiserNormal = tread.getNormal();
                 return true;
             }
@@ -109,6 +111,7 @@ namespace pcl
             const Riser<PointOut>& riser = step.getRiser();
             if ((riser.getHeight() < checkThreshold + precision)  && (riser.getHeight() > checkThreshold - precision))  
               {
+                std::cout<<"##### Riser height is : "<< riser.getHeight() << std::endl;
                 RiserNormal = riser.getNormal();
                 return true;
               }

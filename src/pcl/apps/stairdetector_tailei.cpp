@@ -119,17 +119,17 @@ public:
             //                                    << coefficients->values[2] << " " 
             //                                    << coefficients->values[3] << std::endl;
 
-            Eigen::Vector3f M, N, axis, tmp; // M: current; N: reference; axis: rotation axis
-            M << coefficients->values[0], coefficients->values[1], coefficients->values[2];
-            N  = stair_detector.getRiserNormal();
+            Eigen::Vector3f M; // M: current;
+            M << 0.0,0.0,1.0;
+            Eigen::Vector3f N  = stair_detector.getRiserNormal();
             
             // sepration angle cos
             double costheta = M.dot(N) / (M.norm() * N.norm());
 
-            cout << "angle cos:" << costheta << endl;
-            if ( abs(costheta) > stair_angle_threshold ) std::cout << "\033[1;32mbold Riser is Ready!!  \033[0m\n" << std::endl;
+            cout << "angle cos :" << costheta << endl;
+            if ( abs(costheta) > stair_angle_threshold ) std::cout << "\033[1;32m Riser is Ready!!  \033[0m\n" << std::endl;
             else {
-                std::cout << "\033[1;31mbold Riser is not Ready!!  \033[0m\n" << std::endl;
+                std::cout << "\033[1;32m Riser is not Ready!!  \033[0m\n" << std::endl;
             }
         }
         double t = tmr.elapsed();
