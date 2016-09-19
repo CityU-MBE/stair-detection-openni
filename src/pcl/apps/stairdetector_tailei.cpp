@@ -35,14 +35,10 @@
 #include "pcl/io/mo_io.h"
 #include "pcl/surface/surface_utils.h"
 
-//typedef pcl::PointXYZRGB PointIn;
-//typedef pcl::PointXYZRGBNormal PointOut;
-
 // add io
 #include <pcl/io/openni_grabber.h>
 #include <pcl/visualization/cloud_viewer.h>
 
-//////////////
 #include <iostream>
 #include <ctime>
 
@@ -62,7 +58,6 @@ public:
 private:
     timespec beg_, end_;
 };
-//////////////
 
 typedef pcl::PointMoXYZRGB PointIn;
 typedef pcl::PointMoXYZRGBNormal PointOut;
@@ -75,7 +70,7 @@ class SimpleOpenNIViewer
 public:
     SimpleOpenNIViewer () : viewer ("PCL OpenNI Viewer"),frame_id(0),inCloud(new pcl::PointCloud<pcl::PointXYZ>),inCloud_(new pcl::PointCloud<pcl::PointXYZ>){tmr.reset();}
     int frame_id;
-    double stair_angle_threshold = 0.08;
+    double stair_angle_threshold = 0.15;
 
     void cloud_cb_ (const pcl::PointCloud<pcl::PointXYZ>::ConstPtr &cloud_) {
         if (!viewer.wasStopped())
@@ -108,7 +103,7 @@ public:
         bool stair_bool = stair_detector.stairdetection(); 
 
         if (stair_bool == false){
-            std::cout<< "####    There is NO stair    ####" <<std::endl;
+            std::cout << "\033[1;33m There is no stair  \033[0m\n" << std::endl;
         } 
         
         else{
@@ -125,7 +120,7 @@ public:
             // sepration angle cos
             double costheta = M.dot(N) / (M.norm() * N.norm());
 
-            cout << "angle cos :" << costheta << endl;
+            cout << "\033[1;33m angle cos : \033[0m\n" << costheta << endl;
             if ( abs(costheta) < stair_angle_threshold ) std::cout << "\033[1;32m Riser is Ready!!  \033[0m\n" << std::endl;
             else {
                 std::cout << "\033[1;31m Riser is not Ready!!  \033[0m\n" << std::endl;

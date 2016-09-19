@@ -53,7 +53,7 @@ namespace pcl
       //If there is a StairSteps
       bool stairdetection()
       {
-        int maxNumberSteps = 6;
+        int maxNumberSteps = 20;
         int minNumberSteps = 2;
         int stair_count = stepsNumberDetection();
          
@@ -84,10 +84,10 @@ namespace pcl
       bool  stepsParametersDetection()
       { 
         StairSteps steps = model.getSteps ();
-        float checkThreshold = 0.24;
-		float lengthThreshold = 0.45;
-        float precision = 0.04;
-		float lengthThresholdUp = 0.9;
+        float checkThreshold = 0.12;
+        float precision = 0.03;
+		float lengthThreshold = 0.5;
+		float lengthThresholdUp = 0.75;
         int count = 0;
         for (size_t i = 0; i < steps.size (); i++)
         {
@@ -96,27 +96,26 @@ namespace pcl
           {
             const Tread<PointOut>& tread = step.getTread ();
             if ((tread.getLDEpth() < checkThreshold + precision)  && (tread.getLDEpth() > checkThreshold - precision) && 
-				(tread.getLength() > lengthThreshold) && (tread.getLength() > lengthThresholdUp))
-            {
-                std::cout<<"##### Riser height is : "<<tread.getLDEpth() <<" Riser length is: "<< tread.getLength()   <<" #####" << std::endl;
-                RiserNormal = tread.getNormal();
-                return true;
-            }
-            if ((tread.getRDepth() < checkThreshold + precision)  && (tread.getRDepth() > checkThreshold - precision) && 
-				(tread.getLength() > lengthThreshold) && (tread.getLength() > lengthThresholdUp)) 
-            {
-                std::cout<<"##### Riser height is : "<<tread.getRDepth() <<" Riser length is: "<< tread.getLength() <<" #####"   << std::endl;
-                RiserNormal = tread.getNormal();
-                return true;
+                (tread.getLength() > lengthThreshold) && (tread.getLength() < lengthThresholdUp)){
+                if ((tread.getRDepth() < checkThreshold + precision)  && (tread.getRDepth() > checkThreshold - precision)){
+                    std::cout<<"##### Tread Rheight is : "<<tread.getRDepth()
+                             <<" Tread Lheight is: "<< tread.getLDEpth() 
+                             <<" Tread length is: "<< tread.getLength() 
+                             <<" #####"<< std::endl;
+                    RiserNormal = tread.getNormal();
+                    return true;
+                } 
             }
           }
           if (step.hasRiser ())
           {
             const Riser<PointOut>& riser = step.getRiser();
             if ((riser.getHeight() < checkThreshold + precision)  && (riser.getHeight() > checkThreshold - precision) && 
-				(riser.getLength() > lengthThreshold) && (riser.getLength() > lengthThresholdUp)) 
+				(riser.getLength() > lengthThreshold) && (riser.getLength() < lengthThresholdUp)) 
               {
-                std::cout<<"##### Riser height is : "<< riser.getHeight() <<" Riser length is: "<< riser.getLength() <<" #####" << std::endl;
+                std::cout<<"##### Riser height is : "<< riser.getHeight() 
+                         <<"Riser length is: "<< riser.getLength() 
+                         <<" #####" << std::endl;
                 RiserNormal = riser.getNormal();
                 return true;
               }
