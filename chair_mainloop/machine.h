@@ -200,7 +200,6 @@ private:
         // individual detectors:
         Object YHY_code_TABLE(const pcl::PointCloud<pcl::PointXYZ>::Ptr & ptc)
         {
-
             pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_p (new pcl::PointCloud<pcl::PointXYZ>), cloud_f (new pcl::PointCloud<pcl::PointXYZ>),
                                                 inCloud (new pcl::PointCloud<pcl::PointXYZ>);
 
@@ -217,14 +216,14 @@ private:
             seg.setMethodType (pcl::SAC_RANSAC);
             seg.setDistanceThreshold (0.01);
 
-            /** ------ Create the filtering object - start ------
-            * ref: http://pointclouds.org/documentation/tutorials/extract_indices.php
-            */
             int i = 0, nr_points = (int) inCloud->points.size ();
             pcl::ExtractIndices<pcl::PointXYZ> extract;
 
             std::cerr << "YHY_code_TABLE start!!!!" << std::endl;
 
+            /** ------ Filtering planes - start ------
+            * ref: http://pointclouds.org/documentation/tutorials/extract_indices.php
+            */
             // While 30% of the original cloud is still there
             while (inCloud->points.size () > 0.3 * nr_points) {
                 seg.setInputCloud (inCloud);
@@ -259,12 +258,10 @@ private:
                 i++;
 
                 if ( abs(costheta) > 0.8 ) {
-                    std::cerr << "\033[1;32m DETECT PLANE !! \033[0m\n" << std::endl;
+                    std::cerr << "\033[1;32m PLANE DETECTED!! \033[0m\n" << std::endl;
                     if (!(coefficients->values[3] < -0.5 && coefficients->values[3] > -0.8)) {
                         continue;
                     }
-
-                    /** ------ Create the filtering object - end------ */
 
                     int pPointsNum = (int) cloud_p->points.size (); // number of filtered points -- the plane
 
@@ -276,14 +273,11 @@ private:
                     // s.my_pause();
                     cerr << "TABLE_OBJ detected" << endl;
                     return TABLE_OBJ;
-
-                    // break;
                 }
             }
 
             // printf("### Computation Done. ###\n");
             // printf("============================================\n");
-            /* ------- table_detection end -------*/
 
             cerr << "try detect => TABLE_OBJ" << endl;
             // s.my_pause();
@@ -291,13 +285,140 @@ private:
             return NONE_OBJ;
         }
 
+
+        /** Simple PLANE_END detection
+         *@ Decision making appears in the while loop
+         *@ For more detail, pls refer to SrcPATH/apps/ground_end_detection.cpp
+         */
         Object YHY_code_PLANE_END(const pcl::PointCloud<pcl::PointXYZ>::Ptr & ptc)
         {
-            //TODO: change to real code
+            // TODO: declare important things three times
+            // TODO: add functions to make the program concise!
+            // TODO: add functions to make the program concise!
+            // TODO: add functions to make the program concise!
+            pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_p (new pcl::PointCloud<pcl::PointXYZ>), cloud_f (new pcl::PointCloud<pcl::PointXYZ>),
+                                                inCloud (new pcl::PointCloud<pcl::PointXYZ>);
+            pcl::copyPointCloud(*ptc, *inCloud);
+
+            pcl::ModelCoefficients::Ptr coefficients (new pcl::ModelCoefficients);
+            pcl::PointIndices::Ptr inliers (new pcl::PointIndices);
+            // Create the segmentation object
+            pcl::SACSegmentation<pcl::PointXYZ> seg;
+            // Optional
+            seg.setOptimizeCoefficients (true);
+            // Mandatory
+            seg.setModelType (pcl::SACMODEL_PLANE);
+            seg.setMethodType (pcl::SAC_RANSAC);
+            seg.setDistanceThreshold (0.01);
+
+            int i = 0, nr_points = (int) inCloud->points.size ();
+            pcl::ExtractIndices<pcl::PointXYZ> extract;
+
+            std::cerr << "YHY_code_PLANE_END start!!!!" << std::endl;
+
+            /** ------ Filtering planes - start ------
+            * ref: http://pointclouds.org/documentation/tutorials/extract_indices.php
+            */
+            // While 30% of the original cloud is still there
+            while (inCloud->points.size () > 0.3 * nr_points) {
+
+                seg.setInputCloud (inCloud);
+                seg.segment (*inliers, *coefficients);
+
+                if (inliers->indices.size () == 0) {
+                    std::cerr << "Could not estimate a planar model for the given dataset." << std::endl;
+                    break;
+                }
+
+                Eigen::Vector3f M, N, axis, tmp; // M: current; N: reference; axis: rotation axis
+                M << coefficients->values[0], coefficients->values[1], coefficients->values[2];
+                N << 0.0, 1.0, 0.0;
+
+                // sepration angle cos
+                double costheta = M.dot(N) / (M.norm() * N.norm());
+
+                // cout << "angle cos:" << costheta << endl;
+
+                // Extract the inliers
+                extract.setInputCloud (inCloud);
+                extract.setIndices (inliers);
+                extract.setNegative (false);
+                extract.filter (*cloud_p);
+                // std::cerr << "PointCloud representing the planar component: " << cloud_p->width * cloud_p->height << " data points." << std::endl;
+
+                // Create the filtering object
+                extract.setNegative (true);
+                extract.filter (*cloud_f);
+                inCloud.swap (cloud_f); // inCloud
+
+                i++;
+
+                /** threshold of Ground's parallelity
+                *@ {double}
+                *@ threshold might be changed after abs(costheta)
+                */
+                if ( abs(costheta) > 0.85 && coefficients->values[3] < 0.30) {
+                    std::cerr << "\033[1;32m PLANE DETECTED!! \033[0m" << std::endl;
+                    if (!(coefficients->values[3] < 0.30 && coefficients->values[3] > 0)) {
+                        // Ground should have a appropriate height.
+                        std::cerr << "\033[1;32m ERROR: PLANE height is!! \033[0m" << -coefficients->values[3] << std::endl;
+                        continue;
+                    }
+
+                    int pPointsNum = (int) cloud_p->points.size (); // number of filtered points -- the plane
+
+                    double maxX = -10000, minX = 10000, meanX = 0;
+                    // double maxY = -10000, minY = 10000, meanY = 0;
+                    double maxZ = -10000, minZ = 10000, meanZ = 0;
+                    for (int index = 0; index < pPointsNum; index++) {
+                        pcl::PointXYZ tmpPoint;
+                        tmpPoint = cloud_p->points[index];
+                        if (tmpPoint.z > 2.5 || abs(tmpPoint.x) > 0.2) {
+                            // Points with z bigger than 3.0
+                            // should not be within a GROUND_END.
+                            continue;
+                        }
+                        // std::cerr << "    " << tmpPoint.x << " "
+                        // << tmpPoint.y << " "
+                        // << tmpPoint.z << std::endl;
+                        // if (index > 10) {
+                        //     break;
+                        // }
+                        // if (maxX < tmpPoint.x) maxX = tmpPoint.x;
+                        // if (minX > tmpPoint.x) minX = tmpPoint.x;
+                        // if (maxY < tmpPoint.y) maxY = tmpPoint.y;
+                        // if (minY > tmpPoint.y) minY = tmpPoint.y;
+                        if (maxZ < tmpPoint.z) maxZ = tmpPoint.z;
+                        if (minZ > tmpPoint.z) minZ = tmpPoint.z;
+                        meanX += tmpPoint.x;
+                        // meanY += tmpPoint.y;
+                        meanZ += tmpPoint.z;
+                    }
+                    // meanX /= pPointsNum;
+                    // meanY /= pPointsNum;
+                    meanZ /= pPointsNum;
+                    // std::cerr << "    minX: " << minX << "    maxX: " << maxX << "    meanX: " << meanX << std::endl;
+                    // std::cerr << "    minY: " << minY << "    maxY: " << maxY << "    meanY: " << meanY << std::endl;
+                    std::cerr << "    minZ: " << minZ << "    maxZ: " << maxZ << "    meanZ: " << meanZ << std::endl;
+
+
+                    std::cerr << "    GROUND GROUND GROUND GROUND!!!!" << " i: "<< i << " costheta: " << costheta << std::endl;
+                    std::cerr << "\033[1;32m    GROUND GROUND GROUND GROUND!!!! height of ground is \033[0m" <<  - coefficients->values[3] << "m." << std::endl;
+
+                    if (maxZ - minZ > 0.5) {
+                        continue;
+                    }
+
+                    cerr << "try detect => NEXT_OBJ" << endl;
+                    // s.my_pause();
+                    cerr << "PLANE_END detected" << endl;
+                    return PLANE_END;
+                }
+            }
             cout << "try detect => PLANE_END" << endl;
-            s.my_pause();
-            cout << "detected" << endl;
-            return PLANE_END;
+            // s.my_pause();
+            cerr << "not detected" << endl;
+            return NONE_OBJ;
         }
 
         Object TAILEI_code_STAIRS(const pcl::PointCloud<pcl::PointXYZ>::Ptr & ptc)
