@@ -69,6 +69,10 @@ namespace pcl
         }
       }
       
+      Eigen::Vector3f getRiserNormal(){
+          return RiserNormal;
+      }
+
       // Detect the number of steps
       inline int stepsNumberDetection ()
       {

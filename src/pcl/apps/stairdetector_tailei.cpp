@@ -75,6 +75,7 @@ class SimpleOpenNIViewer
 public:
     SimpleOpenNIViewer () : viewer ("PCL OpenNI Viewer"),frame_id(0),inCloud(new pcl::PointCloud<pcl::PointXYZ>),inCloud_(new pcl::PointCloud<pcl::PointXYZ>){tmr.reset();}
     int frame_id;
+    int stair_angle_threshold = 0.8;
 
     void cloud_cb_ (const pcl::PointCloud<pcl::PointXYZ>::ConstPtr &cloud_) {
         if (!viewer.wasStopped())
@@ -89,7 +90,6 @@ public:
         sor.setInputCloud (inCloud_);
         sor.setLeafSize (0.02, 0.02, 0.02);
         sor.filter (*inCloud);
-
         //std::cout << "Before: " << inCloud_->width * inCloud_->height << " After: " << inCloud->width * inCloud->height << "\n";
 #endif
         
@@ -105,76 +105,54 @@ public:
         stair_detector.setInputCloud(inCloudMo);
         pcl::PointCloud<PointIn>::Ptr out = stair_detector.compute();
         
-        std::cout<< "####    There is a stair?    ####" <<std::endl;
-        std::cout<< "####    "<<stair_detector.stairdetection()<< "    ####" <<std::endl;
+        bool stair_bool = stair_detector.stairdetection(); 
 
-
-            /*
+        if (stair_bool == false){
+            std::cout<< "####    There is NO stair    ####" <<std::endl;
+        } 
+        
+        else{
             pcl::ModelCoefficients::Ptr coefficients (new pcl::ModelCoefficients);
-            pcl::PointIndices::Ptr inliers (new pcl::PointIndices);
-            // Create the segmentation object
-            pcl::SACSegmentation<pcl::PointXYZ> seg;
-            // Optional
-            seg.setOptimizeCoefficients (true);
-            // Mandatory
-            seg.setModelType (pcl::SACMODEL_PLANE);
-            seg.setMethodType (pcl::SAC_RANSAC);
-            seg.setDistanceThreshold (0.01);
 
-            seg.setInputCloud (inCloud);
-            seg.segment (*inliers, *coefficients);
+            //std::cerr << "Model coefficients: " << coefficients->values[0] << " " 
+            //                                    << coefficients->values[1] << " "
+            //                                    << coefficients->values[2] << " " 
+            //                                    << coefficients->values[3] << std::endl;
 
-            if (inliers->indices.size () == 0)
-            {
-                PCL_ERROR ("Could not estimate a planar model for the given dataset.");
-                return;
+            Eigen::Vector3f M, N, axis, tmp; // M: current; N: reference; axis: rotation axis
+            M << coefficients->values[0], coefficients->values[1], coefficients->values[2];
+            N  = stair_detector.getRiserNormal();
+            
+            // sepration angle cos
+            double costheta = M.dot(N) / (M.norm() * N.norm());
+
+            cout << "angle cos:" << costheta << endl;
+            if ( abs(costheta) > stair_angle_threshold ) std::cout << "\033[1;32mbold Riser is Ready!!  \033[0m\n" << std::endl;
+            else {
+                std::cout << "\033[1;31mbold Riser is not Ready!!  \033[0m\n" << std::endl;
             }
-
-  std::cerr << "Model coefficients: " << coefficients->values[0] << " " 
-                                      << coefficients->values[1] << " "
-                                      << coefficients->values[2] << " " 
-                                      << coefficients->values[3] << std::endl;
-
-  std::cerr << "Model inliers: " << inliers->indices.size () << std::endl;
-
-  Eigen::Vector3f M, N, axis, tmp; // M: current; N: reference; axis: rotation axis
-  M << coefficients->values[0], coefficients->values[1], coefficients->values[2];
-  N << 0.0, 1.0, 0.0;
-
-  // sepration angle cos
-  double costheta = M.dot(N) / (M.norm() * N.norm());
-
-  cout << "angle cos:" << costheta << endl;
-
-  if ( abs(costheta) > 0.8 ) std::cout << "\033[1;32mbold DETECT GROUND !! \033[0m\n" << std::endl;
-
-  
-
-  
-                        
-                        double t = tmr.elapsed();
-                        std::cout << "TIME: process " << t << std::endl;
-                        printf("### Computation Done. ###\n");
-                        printf("============================================\n");
+        }
+        double t = tmr.elapsed();
+        std::cout << "TIME: process " << t << std::endl;
+        printf("### Computation Done. ###\n");
+        printf("============================================\n");
 
 
-                        if ( 0)
-                        {
-                                //std::string outPath = "MingPt";
-                                //outPath.replace (outPath.length()-4, 4, "_out.vtk");
-                                //    pcl::PointCloud<PointOut>::ConstPtr ptr2 = out;
-                                //    pcl::io::savePolygonFileVTK (outPath.c_str (), *pcl::surface::getMesh<PointIn, PointOut>(out) );
-                                char f[50];
-                                sprintf (f, "out_%d.pcd", frame_id);
-                                //    pcl::io::savePCDFileBinary (outPath.c_str (), *out);
-                               // pcl::io::saveMoPcd (f, *out);
-                        }
-                */
+        if ( 0)
+        {
+            //std::string outPath = "MingPt";
+            //outPath.replace (outPath.length()-4, 4, "_out.vtk");
+            //pcl::PointCloud<PointOut>::ConstPtr ptr2 = out;
+            //pcl::io::savePolygonFileVTK (outPath.c_str (), *pcl::surface::getMesh<PointIn, PointOut>(out) );
+            char f[50];
+            sprintf (f, "out_%d.pcd", frame_id);
+            //pcl::io::savePCDFileBinary (outPath.c_str (), *out);
+            // pcl::io::saveMoPcd (f, *out);
+        }
         frame_id ++;
     }
 
-        void run ()
-        {
+    void run (){
         pcl::Grabber* interface = new pcl::OpenNIGrabber();
 
         boost::function<void (const pcl::PointCloud<pcl::PointXYZ>::ConstPtr&)> f =
@@ -190,15 +168,12 @@ public:
         }
 
         interface->stop ();
-        }
+    }
 
-        pcl::visualization::CloudViewer viewer;
-        pcl::PointCloud<pcl::PointXYZ>::Ptr inCloud, inCloud_;
-        Timer tmr;
+    pcl::visualization::CloudViewer viewer;
+    pcl::PointCloud<pcl::PointXYZ>::Ptr inCloud, inCloud_;
+    Timer tmr;
 };
-
-
-
 
 int main (int argc, char **argv)
 {
