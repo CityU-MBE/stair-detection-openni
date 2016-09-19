@@ -16,7 +16,7 @@
 #include <pcl/point_types.h>
 #include <pcl/common/io.h>
 
-// for plane extraction -- YHY:
+// for table(plane) extraction -- YHY:
 #include <pcl/ModelCoefficients.h>
 #include <pcl/segmentation/sac_segmentation.h>
 #include <pcl/filters/extract_indices.h>
@@ -46,7 +46,7 @@ public:
 public:
    enum Object { //detectable objects
        TABLE_OBJ,
-       PLANE,
+       PLANE, // !!! Object PLANE is not used in this file
        PLANE_END,
        STAIRS,
        GROUND_ONLY,
@@ -141,14 +141,23 @@ private:
 
         Object detect_object_new_front(const std::vector<Object> & list)
         {
-            std::cerr << "list number:" << list.size() << std::endl;
-            for (size_t i = 0; i<list.size(); i++)
-            {
-                Object obj = detect_object_core( list[i], s.cloudXYZ_front );
-                if (obj != NONE_OBJ)
-                    return obj;
-                else
-                    continue;
+            std::cerr << "List size: " << list.size() << std::endl;
+            Object obj = NONE_OBJ;
+
+            /** !!!IMPORTANT, FOLLOWING WHILE LOOP NEEDS TO BE CHECKED:
+            *@ Change the structure for loop, otherwise it will not work
+            *@ YHY
+            */
+            while (obj == NONE_OBJ){
+                for (size_t i = 0; i < list.size(); i++)
+                {
+                    obj = detect_object_core( list[i], s.cloudXYZ_front );
+                    if (obj != NONE_OBJ) {
+                        return obj;
+                    }
+                    else
+                        continue;
+                }
             }
         }
         Object detect_object_new_back(const std::vector<Object> & list)
@@ -168,7 +177,7 @@ private:
             switch( obj )
             {
                 case TABLE_OBJ:
-                case PLANE:
+                // case PLANE: !!! PLANE is not detected in the TABLE_OBJ now -- YHY
                     res = YHY_code_TABLE(ptc);
                     break;
                 case PLANE_END:
@@ -218,7 +227,7 @@ private:
             int i = 0, nr_points = (int) inCloud->points.size ();
             pcl::ExtractIndices<pcl::PointXYZ> extract;
 
-            std::cerr << "YHY_code_TABLE!!!!" << std::endl;
+            std::cerr << "YHY_code_TABLE start!!!!" << std::endl;
 
             // While 30% of the original cloud is still there
             while (inCloud->points.size () > 0.3 * nr_points) {
@@ -254,7 +263,7 @@ private:
                 i++;
 
                 if ( abs(costheta) > 0.8 ) {
-                    std::cout << "\033[1;32mbold DETECT PLANE !! \033[0m\n" << std::endl;
+                    std::cerr << "\033[1;32m DETECT PLANE !! \033[0m\n" << std::endl;
                     if (!(coefficients->values[3] < -0.5 && coefficients->values[3] > -0.8)) {
                         continue;
                     }
@@ -265,14 +274,14 @@ private:
 
 
                     std::cerr << "    TABLE TABLE TABLE TABLE!!!!" << " i: "<< i << " costheta: " << costheta << std::endl;
-                    std::cout << "\033[1;32mbold TABLE TABLE TABLE TABLE!!!! height of table is \033[0m" <<  - coefficients->values[3] << "m." << std::endl;
+                    std::cerr << "\033[1;31m    TABLE TABLE TABLE TABLE!!!! height of table is \033[0m" <<  - coefficients->values[3] << "m." << std::endl;
 
-                    cout << "try detect => TABLE_OBJ" << endl;
-                    s.my_pause();
-                    cout << "detected" << endl;
+                    cerr << "try detect => NEXT_OBJ" << endl;
+                    // s.my_pause();
+                    cerr << "TABLE_OBJ detected" << endl;
                     return TABLE_OBJ;
 
-                    break;
+                    // break;
                 }
             }
 
@@ -280,9 +289,9 @@ private:
             // printf("============================================\n");
             /* ------- table_detection end -------*/
 
-            cout << "try detect => NONE_OBJ" << endl;
-            s.my_pause();
-            cout << "not detected" << endl;
+            cerr << "try detect => TABLE_OBJ" << endl;
+            // s.my_pause();
+            cerr << "not detected" << endl;
             return NONE_OBJ;
         }
 
@@ -335,7 +344,6 @@ private:
                         std::vector<Object> which_objects;
                         which_objects.push_back(TABLE_OBJ);
                         obj  = detect_object_new(which_objects, FCAMERA, "[START MODE]");
-                        std::cerr << "FINISH ONE TIME" << std::endl;
                         usleep(300000);
                 }
                 changeMode(TABLE);
