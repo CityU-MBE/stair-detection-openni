@@ -285,6 +285,86 @@ private:
             return NONE_OBJ;
         }
 
+        Object YHY_code_LARGE_PLANE(const pcl::PointCloud<pcl::PointXYZ>::Ptr & ptc)
+        {
+            pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_p (new pcl::PointCloud<pcl::PointXYZ>), cloud_f (new pcl::PointCloud<pcl::PointXYZ>),
+                                                inCloud (new pcl::PointCloud<pcl::PointXYZ>);
+
+            pcl::copyPointCloud(*ptc, *inCloud);
+
+            pcl::ModelCoefficients::Ptr coefficients (new pcl::ModelCoefficients);
+            pcl::PointIndices::Ptr inliers (new pcl::PointIndices);
+            // Create the segmentation object
+            pcl::SACSegmentation<pcl::PointXYZ> seg;
+            // Optional
+            seg.setOptimizeCoefficients (true);
+            // Mandatory
+            seg.setModelType (pcl::SACMODEL_PLANE);
+            seg.setMethodType (pcl::SAC_RANSAC);
+            seg.setDistanceThreshold (0.01);
+
+            int nr_points = (int) inCloud->points.size ();
+            pcl::ExtractIndices<pcl::PointXYZ> extract;
+
+            std::cerr << "YHY_code_LARGE_PLANE start!!!!" << std::endl;
+
+            /** ------ Filtering planes - start ------
+            * ref: http://pointclouds.org/documentation/tutorials/extract_indices.php
+            */
+
+            seg.setInputCloud (inCloud);
+            seg.segment (*inliers, *coefficients);
+
+            if (inliers->indices.size () == 0) {
+              std::cerr << "Could not estimate a planar model for the given dataset." << std::endl;
+              return NONE_OBJ;
+            }
+
+            Eigen::Vector3f M, N, axis, tmp; // M: current; N: reference; axis: rotation axis
+            M << coefficients->values[0], coefficients->values[1], coefficients->values[2];
+            N << 0.0, 1.0, 0.0;
+
+            // sepration angle cos
+            double costheta = M.dot(N) / (M.norm() * N.norm());
+
+            // cout << "angle cos:" << costheta << endl;
+
+            // Extract the inliers
+            extract.setInputCloud (inCloud);
+            extract.setIndices (inliers);
+            extract.setNegative (false);
+            extract.filter (*cloud_p);
+            // std::cerr << "PointCloud representing the planar component: " << cloud_p->width * cloud_p->height << " data points." << std::endl;
+
+            // Create the filtering object
+            // extract.setNegative (true);
+            // extract.filter (*cloud_f);
+            // inCloud.swap (cloud_f); // inCloud
+
+            if ( abs(costheta) > 0.85 && cloud_p->points.size () > 0.5 * nr_points) {
+                std::cerr << "\033[1;32m PLANE DETECTED!! \033[0m\n" << std::endl;
+                if (!(coefficients->values[3] < 0.30 && coefficients->values[3] > 0)) {
+                    cerr << "try detect => PLANE" << endl;
+                    // s.my_pause();
+                    cerr << "not detected" << endl;
+                    return NONE_OBJ;
+                }
+
+                int pPointsNum = (int) cloud_p->points.size (); // number of filtered points -- the plane
+
+
+                std::cerr << "    PLANE PLANE PLANE PLANE!!!!" << " costheta: " << costheta << std::endl;
+                std::cerr << "\033[1;31m    LARGE PLANE LARGE PLANE!!!! height of table is \033[0m" <<  - coefficients->values[3] << "m." << std::endl;
+
+                cerr << "try detect => NEXT_OBJ" << endl;
+                // s.my_pause();
+                cerr << "LARGE_PLANE detected" << endl;
+                return PLANE;
+            }
+	    return NONE_OBJ;
+        }
+
+
 
         /** Simple PLANE_END detection
          *@ Decision making appears in the while loop
