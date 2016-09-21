@@ -5,8 +5,8 @@
  *      Author: elmasry
  */
 
-#ifndef STAIRDETECTIONDEMO_H_
-#define STAIRDETECTIONDEMO_H_
+#ifndef STAIRDETECTIONLOCAL_H_
+#define STAIRDETECTIONLOCAL_H_
 
 #include <Eigen/Dense>
 #include <yaml-cpp/yaml.h>
@@ -330,4 +330,4 @@ namespace pcl
 }
 
 #define PCL_INSTANTIATE_StairDetectionLocal(In,Out) template class PCL_EXPORTS pcl::StairDetectionLocal<In,Out>;
-#endif /* STAIRDETECTIONDEMO_H_ */
+#endif /* STAIRDETECTIONLOCAL_H_ */

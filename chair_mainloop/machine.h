@@ -28,7 +28,6 @@
 
 // for stairs detection --TL:
 #include <yaml-cpp/yaml.h>   // Add the yaml include and lib
-#include "pcl/apps/stairdetectionlocal.h"
 
 using namespace std;
 class Machine
