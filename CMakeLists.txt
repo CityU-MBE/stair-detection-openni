@@ -124,7 +124,7 @@ target_link_libraries(pcd_to_rgb ${OpenCV_LIBS} ${PCL_LIBRARIES} )
 
 #Tailei
 add_executable(steps_test src/pcl/apps/stairdetector_tailei.cpp)
-target_link_libraries(steps_test boost_thread boost_filesystem boost_system  ${OpenCV_LIBS} ${PCL_LIBRARIES} fhg_apps ${FHG_PCL_BINDINGS})
+target_link_libraries(steps_test boost_thread boost_filesystem boost_system  ${OpenCV_LIBS} ${PCL_LIBRARIES} fhg_apps ${FHG_PCL_BINDINGS} yaml_cpp)
 #end tailei
 
 add_executable(icp_vis tests/icp_vis.cpp)
