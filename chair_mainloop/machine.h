@@ -183,7 +183,8 @@ private:
                     res = TAILEI_code_STAIRS(ptc);
                     break;
                 case GROUND_ONLY:
-                    res = MING_code_GROUND_ONLY(ptc);
+                    // res = MING_code_GROUND_ONLY(ptc);
+		    res = YHY_code_LARGE_PLANE(ptc);
                     break;
                 case BUMPS:
                     res = LQ_code_BUMPS(ptc);
@@ -344,7 +345,7 @@ private:
             if ( abs(costheta) > 0.85 && cloud_p->points.size () > 0.5 * nr_points) {
                 std::cerr << "\033[1;32m PLANE DETECTED!! \033[0m\n" << std::endl;
                 if (!(coefficients->values[3] < 0.30 && coefficients->values[3] > 0)) {
-                    cerr << "try detect => PLANE" << endl;
+                    cerr << "try detect => LARGE PLANE" << endl;
                     // s.my_pause();
                     cerr << "not detected" << endl;
                     return NONE_OBJ;
@@ -354,12 +355,12 @@ private:
 
 
                 std::cerr << "    PLANE PLANE PLANE PLANE!!!!" << " costheta: " << costheta << std::endl;
-                std::cerr << "\033[1;31m    LARGE PLANE LARGE PLANE!!!! height of table is \033[0m" <<  - coefficients->values[3] << "m." << std::endl;
+                std::cerr << "\033[1;31m    GROUND ONLY  GROUND ONLY!!!! height of GROUND is \033[0m" <<  - coefficients->values[3] << "m." << std::endl;
 
                 cerr << "try detect => NEXT_OBJ" << endl;
                 // s.my_pause();
                 cerr << "LARGE_PLANE detected" << endl;
-                return PLANE;
+                return GROUND_ONLY;
             }
 	    return NONE_OBJ;
         }
