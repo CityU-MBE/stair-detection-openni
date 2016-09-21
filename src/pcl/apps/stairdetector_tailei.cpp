@@ -80,6 +80,8 @@ public:
         yamlNode = YAML::LoadFile(yamlName);
         stair_angle_threshold = yamlNode["angleThreshold"].as<float>();
     }
+    
+    
     int frame_id;
     void cloud_cb_ (const pcl::PointCloud<pcl::PointXYZ>::ConstPtr &cloud_) {
         if (!viewer.wasStopped())

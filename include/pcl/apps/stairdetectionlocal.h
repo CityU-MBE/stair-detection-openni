@@ -51,11 +51,17 @@ namespace pcl
             pcl::GlobalModel<PointOut> globalModel;
             std::string cloudName;
 
+            float checkHeight;
+            float precision ;
+            float lengthThresholdShort;
+            float lengthThresholdLong;
+
+            int maxNumberSteps;
+            int minNumberSteps;
+
             //If there is a StairSteps
             bool stairdetection()
             {
-                int maxNumberSteps = yamlNode["maxNumberSteps"].as<int>();
-                int minNumberSteps = yamlNode["minNumberSteps"].as<int>();
                 int stair_count = stepsNumberDetection();
 
                 if (stair_count < minNumberSteps || stair_count > maxNumberSteps) {
@@ -85,10 +91,6 @@ namespace pcl
             bool  stepsParametersDetection()
             { 
                 StairSteps steps = model.getSteps ();
-                float checkThreshold = yamlNode["RiserHeight"].as<float>();
-                float precision = yamlNode["RiserPrecision"].as<float>();
-                float lengthThreshold = yamlNode["RiserLengthShort"].as<float>();
-                float lengthThresholdUp = yamlNode["RiserLengthLong"].as<float>();
                 int count = 0;
                 for (size_t i = 0; i < steps.size (); i++)
                 {
@@ -96,9 +98,9 @@ namespace pcl
                     if (step.hasTread ())
                     {
                         const Tread<PointOut>& tread = step.getTread ();
-                        if ((tread.getLDEpth() < checkThreshold + precision)  && (tread.getLDEpth() > checkThreshold - precision) && 
-                                (tread.getLength() > lengthThreshold) && (tread.getLength() < lengthThresholdUp)){
-                            if ((tread.getRDepth() < checkThreshold + precision)  && (tread.getRDepth() > checkThreshold - precision)){
+                        if ((tread.getLDEpth() < checkHeight + precision)  && (tread.getLDEpth() > checkHeight - precision) && 
+                                (tread.getLength() > lengthThresholdShort) && (tread.getLength() < lengthThresholdLong)){
+                            if ((tread.getRDepth() < checkHeight + precision)  && (tread.getRDepth() > checkHeight - precision)){
                                 std::cout<<"##### Tread Rheight is : "<<tread.getRDepth()
                                     <<" Tread Lheight is: "<< tread.getLDEpth() 
                                     <<" Tread length is: "<< tread.getLength() 
@@ -111,8 +113,8 @@ namespace pcl
                     if (step.hasRiser ())
                     {
                         const Riser<PointOut>& riser = step.getRiser();
-                        if ((riser.getHeight() < checkThreshold + precision)  && (riser.getHeight() > checkThreshold - precision) && 
-                                (riser.getLength() > lengthThreshold) && (riser.getLength() < lengthThresholdUp)) 
+                        if ((riser.getHeight() < checkHeight + precision)  && (riser.getHeight() > checkHeight - precision) && 
+                                (riser.getLength() > lengthThresholdShort) && (riser.getLength() < lengthThresholdLong)) 
                         {
                             std::cout<<"##### Riser height is : "<< riser.getHeight() 
                                 <<"Riser length is: "<< riser.getLength() 
@@ -204,7 +206,31 @@ namespace pcl
                 cameraHeight = 0.0f;
                 cameraAngle = 0.0f;
                 yamlNode = YAML::LoadFile(yamlName);
+                checkHeight = yamlNode["RiserHeight"].as<float>();
+                precision = yamlNode["RiserPrecision"].as<float>();
+                lengthThresholdShort = yamlNode["RiserLengthShort"].as<float>();
+                lengthThresholdLong = yamlNode["RiserLengthLong"].as<float>();
+                maxNumberSteps = yamlNode["maxNumberSteps"].as<int>();
+                minNumberSteps = yamlNode["minNumberSteps"].as<int>();
             }
+
+            StairDetectionLocal(float rHeight,
+                    float rHeightPrecision,
+                    float rLengthShort,
+                    float rLengthLong,
+                    int maxSteps,
+                    int minSteps):
+                checkHeight(rHeight),
+                precision(rHeightPrecision),
+                lengthThresholdShort(rLengthShort),
+                lengthThresholdLong(rLengthLong),
+                maxNumberSteps(maxSteps),
+                minNumberSteps(minSteps){
+                numIterations = 0;
+                cameraHeight = 0.0f;
+                cameraAngle = 0.0f;
+            }
+
             void setInputCloud (const typename pcl::PointCloud<PointIn>::ConstPtr inCloud)
             {
                 this->inCloud = inCloud;
