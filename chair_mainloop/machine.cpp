@@ -1,4 +1,5 @@
 #include "machine.h"
+#include "pcl/apps/stairdetectionlocal.h"
 
 void Machine::start()
 {

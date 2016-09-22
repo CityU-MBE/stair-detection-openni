@@ -8,6 +8,7 @@
 /*#include "ground_only.h"*/
 
 #include <Eigen/Dense>
+#include <yaml-cpp/yaml.h>
 #include <iostream>
 #include <string>
 #include <boost/filesystem.hpp>
@@ -67,11 +68,21 @@ int numIterations = 0;
 
 class SimpleOpenNIViewer
 {
-public:
-    SimpleOpenNIViewer () : viewer ("PCL OpenNI Viewer"),frame_id(0),inCloud(new pcl::PointCloud<pcl::PointXYZ>),inCloud_(new pcl::PointCloud<pcl::PointXYZ>){tmr.reset();}
-    int frame_id;
+private:
+    int stair_state=0;
+    int stair_count=0;
     double stair_angle_threshold = 0.15;
-
+    YAML::Node yamlNode;
+    std::string yamlName;
+public:
+    SimpleOpenNIViewer (std::string yamlname_) : viewer ("PCL OpenNI Viewer"),frame_id(0),inCloud(new pcl::PointCloud<pcl::PointXYZ>),inCloud_(new pcl::PointCloud<pcl::PointXYZ>),yamlName(yamlname_){
+        tmr.reset();
+        yamlNode = YAML::LoadFile(yamlName);
+        stair_angle_threshold = yamlNode["angleThreshold"].as<float>();
+    }
+    
+    
+    int frame_id;
     void cloud_cb_ (const pcl::PointCloud<pcl::PointXYZ>::ConstPtr &cloud_) {
         if (!viewer.wasStopped())
             viewer.showCloud (cloud_);
@@ -90,7 +101,7 @@ public:
         
         tmr.reset();
         pcl::PointCloud<PointIn>::Ptr inCloudMo (new pcl::PointCloud<PointIn>);
-        pcl::StairDetectionLocal<pcl::PointMoXYZRGB, pcl::PointMoXYZRGBNormal>  stair_detector; 
+        pcl::StairDetectionLocal<pcl::PointMoXYZRGB, pcl::PointMoXYZRGBNormal>  stair_detector(yamlName);
         pcl::copyPointCloud (*inCloud, *inCloudMo);
         for (size_t i = 0; i < inCloud->size (); i++)
         {
@@ -103,29 +114,38 @@ public:
         bool stair_bool = stair_detector.stairdetection(); 
 
         if (stair_bool == false){
+            stair_state = 1;
             std::cout << "\033[1;33m There is no stair  \033[0m\n" << std::endl;
         } 
         
         else{
-			
-            //std::cerr << "Model coefficients: " << coefficients->values[0] << " " 
-            //                                    << coefficients->values[1] << " "
-            //                                    << coefficients->values[2] << " " 
-            //                                    << coefficients->values[3] << std::endl;
-
             Eigen::Vector3f M; // M: current;
             M << 0.0,0.0,1.0;
             Eigen::Vector3f N  = stair_detector.getRiserNormal();
             
-            // sepration angle cos
             double costheta = M.dot(N) / (M.norm() * N.norm());
 
             cout << "\033[1;33m angle cos : \033[0m\n" << costheta << endl;
-            if ( abs(costheta) < stair_angle_threshold ) std::cout << "\033[1;32m Riser is Ready!!  \033[0m\n" << std::endl;
+            if ( abs(costheta) < stair_angle_threshold ) {
+                stair_state = 0;
+            }
             else {
-                std::cout << "\033[1;31m Riser is not Ready!!  \033[0m\n" << std::endl;
+                stair_state = 1;
+                std::cout << "\033[1;31m Angle is wrong!!  \033[0m\n" << std::endl;
             }
         }
+
+        if (stair_state ==0 ){
+            if (stair_count >= 3){
+                std::cout << "\033[1;32m Riser is Ready!!  \033[0m\n" << std::endl;
+            }else{
+                std::cout << "\033[1;37m Riser is Not Ready!!  \033[0m\n" << std::endl;
+                stair_count+=1;
+            }
+        }else{
+            stair_count =0;
+        }
+
         double t = tmr.elapsed();
         std::cout << "TIME: process " << t << std::endl;
         printf("### Computation Done. ###\n");
@@ -171,7 +191,7 @@ public:
 
 int main (int argc, char **argv)
 {
-        SimpleOpenNIViewer v;
+        SimpleOpenNIViewer v(argv[1]);
         v.run ();
         return 0;
 }

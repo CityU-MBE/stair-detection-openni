@@ -10,6 +10,7 @@
 #include <pcl/visualization/cloud_viewer.h>
 #include <iostream>
 #include <pcl/filters/voxel_grid.h>
+
 class SimpleOpenNIViewer
 {
         public:

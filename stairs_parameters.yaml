@@ -1,0 +1,17 @@
+# Riser height and the check precision
+# RiserHeight - RiserPrecision < height < RiserHeight + RiserPrecision
+RiserHeight: 0.15
+RiserPrecision: 0.03
+
+# Riser length sup bound and inf bound
+# RiserLengthShort  < Length < RiserLengthLong
+RiserLengthShort: 0.2
+RiserLengthLong: 1.5
+
+# Steps of stairs
+minNumberSteps: 2
+maxNumberSteps: 20
+
+# angle threshold to check if the stairs is in the right direction
+# 0 means parell
+angleThreshold: 0.15

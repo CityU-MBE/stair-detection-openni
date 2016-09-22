@@ -112,23 +112,23 @@ set(FHG_PCL_LIBS fhg_kdtree fhg_utils fhg_io fhg_common fhg_histogram fhg_types 
 #target_link_libraries(stairdetectorlocalXtion boost_thread boost_filesystem boost_system ${OpenCV_LIBS} ${PCL_LIBRARIES} ${FHG_PCL_BINDINGS} fhg_apps)
 ##########################################################################################################
 
-add_executable(playground tests/playground.cpp)
-
-
-add_executable(normalsvis src/pcl/apps/normalsvis.cpp)
-target_link_libraries(normalsvis boost_thread boost_filesystem boost_system ${PCL_LIBRARIES})
-
-#target_link_libraries(playground boost_thread boost_filesystem boost_system ${PCL_LIBRARIES}  )
-add_executable(pcd_to_rgb src/pcl/apps/pcd_to_rgb.cpp)
-target_link_libraries(pcd_to_rgb ${OpenCV_LIBS} ${PCL_LIBRARIES} )
-
-#Tailei
-add_executable(steps_test src/pcl/apps/stairdetector_tailei.cpp)
-target_link_libraries(steps_test boost_thread boost_filesystem boost_system  ${OpenCV_LIBS} ${PCL_LIBRARIES} fhg_apps ${FHG_PCL_BINDINGS})
-#end tailei
-
-add_executable(icp_vis tests/icp_vis.cpp)
-target_link_libraries(icp_vis ${OpenCV_LIBS} ${PCL_LIBRARIES} )
+#add_executable(playground tests/playground.cpp)
+#
+#
+#add_executable(normalsvis src/pcl/apps/normalsvis.cpp)
+#target_link_libraries(normalsvis boost_thread boost_filesystem boost_system ${PCL_LIBRARIES})
+#
+##target_link_libraries(playground boost_thread boost_filesystem boost_system ${PCL_LIBRARIES}  )
+#add_executable(pcd_to_rgb src/pcl/apps/pcd_to_rgb.cpp)
+#target_link_libraries(pcd_to_rgb ${OpenCV_LIBS} ${PCL_LIBRARIES} )
+#
+##Tailei
+#add_executable(steps_test src/pcl/apps/stairdetector_tailei.cpp)
+#target_link_libraries(steps_test boost_thread boost_filesystem boost_system  ${OpenCV_LIBS} ${PCL_LIBRARIES} fhg_apps ${FHG_PCL_BINDINGS} yaml_cpp)
+##end tailei
+#
+#add_executable(icp_vis tests/icp_vis.cpp)
+#target_link_libraries(icp_vis ${OpenCV_LIBS} ${PCL_LIBRARIES} )
 
 
 
