@@ -260,14 +260,14 @@ namespace pcl
 
       public:
 
-        static const int UNASSIGNED = -1;
-        static const int INVALID_CLUSTER = -2;
+        int UNASSIGNED;
+        int INVALID_CLUSTER;
 
         /** \brief Constructor */
         RegionSegmentation () :
             tree_ (), min_pts_per_cluster_ (1), max_pts_per_cluster_ (std::numeric_limits<int>::max ()), distance_tolerance_ (
                 0.01f), angle_tolerance_ (pcl::deg2rad (25.0f)), allow_multi_assignments_ (false), make_complete_segmentation_ (
-                false)
+                false), UNASSIGNED(-1), INVALID_CLUSTER(-2)
         {
 
         }
