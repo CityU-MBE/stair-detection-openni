@@ -14,7 +14,7 @@
 #include <pcl/visualization/registration_visualizer.h>
 
 #include "pcl/common/point_common.h"
-#include "pcl/common/pcl_commons.h";
+#include "pcl/common/pcl_commons.h"
 #include "pcl/registration/icp_dirk.h"
 #include "pcl/registration/registration_dirk.h"
 
@@ -30,10 +30,10 @@ namespace pcl
   {
 
       //max distance tolerated between frames
-      const static float MAX_DIST_BET_FRAMES = 0.15;
+      constexpr static float MAX_DIST_BET_FRAMES = 0.15;
       const static size_t MINNUMMODELS = 5, MAXNUMMODELS = 10;
       //max distance allowed between steps to consider them a match
-      const static float MAXDEVIATIONSTEPS = 0.15;
+      constexpr static float MAXDEVIATIONSTEPS = 0.15;
 
       template<typename Point>
       struct Match

@@ -101,7 +101,13 @@ public:
         
         tmr.reset();
         pcl::PointCloud<PointIn>::Ptr inCloudMo (new pcl::PointCloud<PointIn>);
-        pcl::StairDetectionLocal<pcl::PointMoXYZRGB, pcl::PointMoXYZRGBNormal>  stair_detector(yamlName);
+        //pcl::StairDetectionLocal<pcl::PointMoXYZRGB, pcl::PointMoXYZRGBNormal>  stair_detector(yamlName);
+        pcl::StairDetectionLocal<pcl::PointMoXYZRGB, pcl::PointMoXYZRGBNormal>  stair_detector(yamlNode["RiserHeight"].as<float>(),
+                                    yamlNode["RiserPrecision"].as<float>(),
+                                    yamlNode["RiserLengthShort"].as<float>(),
+                                    yamlNode["RiserLengthLong"].as<float>(),
+                                    yamlNode["maxNumberSteps"].as<int>(),
+                                    yamlNode["minNumberSteps"].as<int>());
         pcl::copyPointCloud (*inCloud, *inCloudMo);
         for (size_t i = 0; i < inCloud->size (); i++)
         {
@@ -109,7 +115,7 @@ public:
         }
 
         stair_detector.setInputCloud(inCloudMo);
-        pcl::PointCloud<PointIn>::Ptr out = stair_detector.compute();
+        stair_detector.compute();
         
         bool stair_bool = stair_detector.stairdetection(); 
 

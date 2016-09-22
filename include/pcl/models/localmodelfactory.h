@@ -30,16 +30,16 @@ namespace pcl
   {
       static const int compIndex = 2;
       //camera coordinate system values
-      static const float maxYDist = 0.8;
-      static const float maxZDist = 0.4;
-      static const float maxXDist = 0.4;
-      static const float minStepLength = 0.5;
-      static const float minStepDepth = 0.1;
-      static const float minStepHeight = 0.1;
-      static const float xDifferenceThreshold = 0.8;
+      static constexpr float maxYDist = 0.8;
+      static constexpr float maxZDist = 0.4;
+      static constexpr float maxXDist = 0.4;
+      static constexpr float minStepLength = 0.5;
+      static constexpr float minStepDepth = 0.1;
+      static constexpr float minStepHeight = 0.1;
+      static constexpr float xDifferenceThreshold = 0.8;
 
-      static const float xDeviationBetStepsThreshold = 0.4;
-      static const float zDeviationBetStepsThreshold = 0.3;
+      static constexpr float xDeviationBetStepsThreshold = 0.4;
+      static constexpr float zDeviationBetStepsThreshold = 0.3;
 
       typedef Eigen::aligned_allocator<PointT> Alloc;
       typedef std::vector<Plane3D<PointT>, Alloc> Plane3DVector;

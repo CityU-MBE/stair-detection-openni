@@ -1,6 +1,5 @@
 #gitignore
 build/*
-lib/*
 <<<<<<< HEAD
 chair_mainloop/build/*
 bin/*

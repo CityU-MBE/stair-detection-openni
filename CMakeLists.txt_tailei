@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 2.6)
 project (fhg_pcl) 
 
 set(CMAKE_BUILD_TYPE RelWithDebInfo)
-set(CMAKE_CXX_FLAGS "-W -Wall -Wno-unused-parameter -frounding-math ")
+set(CMAKE_CXX_FLAGS "-W -Wall -Wno-unused-parameter -frounding-math std=c++11")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib) 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin) 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib) 
@@ -32,10 +32,13 @@ link_directories(/usr/lib/x86_64-linux-gnu)
 set(FHG_PCL_BINDINGS fhg_binding_common fhg_binding_filters fhg_binding_sac fhg_binding_kdtree fhg_binding_search fhg_binding_surface fhg_binding_features fhg_binding_segmentation fhg_binding_registration fhg_binding_visualization)
 
 #Tailei
-add_executable(steps_test src/pcl/apps/stairdetector_tailei.cpp)
-target_link_libraries(steps_test boost_thread boost_filesystem boost_system  ${OpenCV_LIBS} ${PCL_LIBRARIES} fhg_apps ${FHG_PCL_BINDINGS} yaml-cpp)
+#add_executable(steps_test src/pcl/apps/stairdetector_tailei.cpp)
+#target_link_libraries(steps_test boost_thread boost_filesystem boost_system  ${OpenCV_LIBS} ${PCL_LIBRARIES} fhg_apps ${FHG_PCL_BINDINGS} yaml-cpp)
 #end tailei
 
+include_directories(../wheelChair_qt)
+add_executable(testfunc  ../wheelChair_qt/chairdetector.cpp ../wheelChair_qt/test.cpp )
+target_link_libraries(testfunc boost_thread boost_filesystem boost_system  ${OpenCV_LIBS} ${PCL_LIBRARIES} fhg_apps ${FHG_PCL_BINDINGS} yaml-cpp)
 
 
 

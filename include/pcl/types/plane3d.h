@@ -42,19 +42,19 @@ namespace pcl
     protected:
       size_t id;
 
-      const static float ANGLE_THRESHHOLD = 15;
-      static const float minStepLength = 0.2f;
-      const static float minRiserHeight = 0.05f;
-      const static float maxRiserHeight = 0.30;
-      const static float minTreadDepth = 0.1f;
-      const static float smallMinimalDepth = 0.05;
+      constexpr static float ANGLE_THRESHHOLD = 15;
+      static constexpr float minStepLength = 0.2f;
+      constexpr static float minRiserHeight = 0.05f;
+      constexpr static float maxRiserHeight = 0.30;
+      constexpr static float minTreadDepth = 0.1f;
+      constexpr static float smallMinimalDepth = 0.05;
       //max distance between two lines to be considered lieing on the same plane
-      const static float maxDistLinesOnSamePlane = 0.15;
+      constexpr static float maxDistLinesOnSamePlane = 0.15;
       //max distance allowed in bbox for ex. max height deviation between top left and top right, or bottom left and bottom right
-      const static float MAX_DIFF_BBOX_POINTS = 0.05;
+      constexpr static float MAX_DIFF_BBOX_POINTS = 0.05;
       //max distance between two lines to consider it a slope to a step. used to reconstruct plane from 2 line segments
-      const static float MAX_SLOPE_LENGTH_Z = 0.17;
-      const static float MAX_SLOPE_LENGTH_X = 0.15;
+      constexpr static float MAX_SLOPE_LENGTH_Z = 0.17;
+      constexpr static float MAX_SLOPE_LENGTH_X = 0.15;
 
       float length, lDepth, rDepth, height;
       //lines forming the plane model

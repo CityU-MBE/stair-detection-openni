@@ -22,9 +22,9 @@ namespace pcl
     class LineSegment3DHistogram : public AbstractHistogram<LineSegment3D<PointT> , 4>
     {
       //max distance allowed between two lines
-      static const float MAX_DIST_LINES = 0.04;
+      static constexpr float MAX_DIST_LINES = 0.04;
       //max difference between two normal components
-      static const float MAX_ANGLE_BET_LINES = 10;
+      static constexpr float MAX_ANGLE_BET_LINES = 10;
 
       typedef Eigen::aligned_allocator<LineSegment3D<PointT> > Alloc;
       typedef std::vector<LineSegment3D<PointT> , Alloc> LineVector;

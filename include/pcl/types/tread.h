@@ -29,8 +29,8 @@ namespace pcl
       using pcl::Plane3D<PointT>::lDepth;
       using pcl::Plane3D<PointT>::rDepth;
 
-      const static float minLandingLength = 0.5f;
-      const static float minLandingDepth = 0.5f;
+      constexpr static float minLandingLength = 0.5f;
+      constexpr static float minLandingDepth = 0.5f;
 
     protected:
 

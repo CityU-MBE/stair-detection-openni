@@ -21,9 +21,9 @@ namespace pcl
     class Edges2PlanesFactory
     {
 
-      const static float maxRotationDeviationBetLines = 15;
-      const static float minDistBetLines = 0.05;
-      const static float maxDistLinesOnSamePlane = 0.04;
+      constexpr static float maxRotationDeviationBetLines = 15;
+      constexpr static float minDistBetLines = 0.05;
+      constexpr static float maxDistLinesOnSamePlane = 0.04;
 
       int counter;
 

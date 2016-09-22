@@ -238,7 +238,8 @@ namespace pcl
 
             /**
             */
-            typename pcl::PointCloud<PointIn>::Ptr compute ()
+            //typename pcl::PointCloud<PointIn>::Ptr compute ()
+            int compute ()
             {
                 typename pcl::PointCloud<PointIn>::Ptr cloud (new pcl::PointCloud<PointIn> ());
                 pcl::copyPointCloud (*inCloud, *cloud);
@@ -248,7 +249,7 @@ namespace pcl
 
                 cloud->width = inCloud->width;
                 cloud->height = inCloud->height;
-                Quaternion<float> rotQuaternion;
+                //Quaternion<float> rotQuaternion;
                 pcl::cameraToworld (*cloud);
 
                 typename pcl::PointCloud<PointIn>::Ptr outCloud (new pcl::PointCloud<PointIn> ());
@@ -257,8 +258,8 @@ namespace pcl
 
                 p.setInputCloud (cloud);
                 p.compute ();
-                cameraAngle = p.getRotationangle ();
-                rotQuaternion = p.rotQuaternion;
+                //cameraAngle = p.getRotationangle ();
+                //rotQuaternion = p.rotQuaternion;
                 Plane3DVector planes = p.getPlanes ();
 
                 //        {
@@ -282,8 +283,8 @@ namespace pcl
                     char f[50];
                     sprintf(f, "local_borders_%d.pcd", numIterations);
                     pcl::io::saveMoPcd(f, *bordersCloud);
-                    printf("localmodel after creation and add missing planes\n");
-                    model.logSteps();
+                    //printf("localmodel after creation and add missing planes\n");
+                    //model.logSteps();
                 }
 
                 pcl::copyPointCloud (*cloud, *outCloud); //Ming: take input as output
@@ -299,10 +300,10 @@ namespace pcl
                 //logModel(model);
 
 
-                printf ("----------------------------------------------------\n");
+                //printf ("----------------------------------------------------\n");
 
                 numIterations++;
-                return outCloud;
+                return 0;
             }
 
             typename pcl::PointCloud<PointOut>::Ptr getPlanesCloud ()

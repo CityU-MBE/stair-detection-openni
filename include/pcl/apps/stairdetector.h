@@ -27,9 +27,9 @@ namespace pcl
 
       static const int compIndex = 2;
       //camera coordinate system values
-      static const float maxXDist = 0.8;
-      static const float maxYDist = 0.4;
-      static const float maxZDist = 0.4;
+      static constexpr float maxXDist = 0.8;
+      static constexpr float maxYDist = 0.4;
+      static constexpr float maxZDist = 0.4;
 
       typedef Eigen::aligned_allocator<PointT> Alloc;
       typedef std::vector<Plane3D<PointT> , Alloc> Plane3DVector;
