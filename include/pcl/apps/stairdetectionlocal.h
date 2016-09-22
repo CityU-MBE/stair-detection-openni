@@ -79,7 +79,12 @@ namespace pcl
         StairSteps steps = model.getSteps ();
         return steps.size();
       }
-      
+
+#define DETECT_STEPS_HEIGHT(height) ((height < checkThreshold + precision) && \
+                              (height > checkThreshold - precision))
+
+#define DETECT_STEPS_LENGTH(length) ((length < lengthThresholdUp) && \
+                              (length > lengthThreshold))
       // Calculate the tread and rise information
       bool  stepsParametersDetection()
       { 
@@ -92,33 +97,28 @@ namespace pcl
         for (size_t i = 0; i < steps.size (); i++)
         {
           Step<PointOut>& step = steps[i];
-          if (step.hasTread ())
-          {
-            const Tread<PointOut>& tread = step.getTread ();
-            if ((tread.getLDEpth() < checkThreshold + precision)  && (tread.getLDEpth() > checkThreshold - precision) && 
-                (tread.getLength() > lengthThreshold) && (tread.getLength() < lengthThresholdUp)){
-                if ((tread.getRDepth() < checkThreshold + precision)  && (tread.getRDepth() > checkThreshold - precision)){
-                    std::cout<<"##### Tread Rheight is : "<<tread.getRDepth()
-                             <<" Tread Lheight is: "<< tread.getLDEpth() 
-                             <<" Tread length is: "<< tread.getLength() 
-                             <<" #####"<< std::endl;
-                    RiserNormal = tread.getNormal();
-                    return true;
-                } 
-            }
-          }
-          if (step.hasRiser ())
-          {
+          if (step.hasTread ()){
+            const Tread<PointOut>& tread = step.getTread();
+            if ( DETECT_STEPS_HEIGHT(tread.getLDEpth()) && 
+                 DETECT_STEPS_LENGTH(tread.getLength()) &&
+                 DETECT_STEPS_HEIGHT(tread.getRDepth()) )
+                std::cout<<"##### Tread Rheight is : "<<tread.getRDepth()
+                         <<" Tread Lheight is: "<< tread.getLDEpth() 
+                         <<" Tread length is: "<< tread.getLength() 
+                         <<" #####"<< std::endl;
+                RiserNormal = tread.getNormal();
+                return true;
+          } 
+          if (step.hasRiser ()){
             const Riser<PointOut>& riser = step.getRiser();
-            if ((riser.getHeight() < checkThreshold + precision)  && (riser.getHeight() > checkThreshold - precision) && 
-				(riser.getLength() > lengthThreshold) && (riser.getLength() < lengthThresholdUp)) 
-              {
+            if (DETECT_STEPS_HEIGHT(riser.getHeight()) && 
+				DETECT_STEPS_LENGTH(riser.getLength())){
                 std::cout<<"##### Riser height is : "<< riser.getHeight() 
                          <<"Riser length is: "<< riser.getLength() 
                          <<" #####" << std::endl;
                 RiserNormal = riser.getNormal();
                 return true;
-              }
+            }
           } 
         }  
         return false;
@@ -208,8 +208,7 @@ namespace pcl
         this->inCloud = inCloud;
       }
 
-      /**
-       */
+      
       typename pcl::PointCloud<PointIn>::Ptr compute ()
       {
         typename pcl::PointCloud<PointIn>::Ptr cloud (new pcl::PointCloud<PointIn> ());
